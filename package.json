@@ -4,7 +4,8 @@
   "description": "Simple app for sharing tasks between users",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "heroku-postbuild": "gulp build"
   },
   "repository": {
     "type": "git",
@@ -37,6 +38,7 @@
     "body-parser": "^1.15.0",
     "compression": "^1.6.1",
     "css-loader": "^0.23.1",
+    "deepmerge": "^0.2.10",
     "eslint": "^1.10.3",
     "eslint-plugin-react": "^3.16.1",
     "eventemitter3": "^1.1.1",
@@ -46,6 +48,7 @@
     "firebase": "^2.4.1",
     "gulp": "^3.9.1",
     "gulp-bg": "0.0.8",
+    "gulp-clean": "^0.3.2",
     "gulp-env": "^0.4.0",
     "gulp-eslint": "^1.1.1",
     "gulp-nodemon": "^2.0.6",

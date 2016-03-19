@@ -1,6 +1,8 @@
+import merge from 'deepmerge'
+
 const env = process.env.env || 'devel'
 
-const config = {
+const configBase = {
   env: env,
   version: require('../../package').version,
   useWebpackDevServer: true,
@@ -9,4 +11,13 @@ const config = {
   hotPort: 8888,
 }
 
-export default config
+const configEnv = {
+  devel: {},
+  heroku: {
+    presentedHost: 'https://infinite-shelf-71200.herokuapp.com/',
+    port: process.env.PORT,
+    useWebpackDevServer: false
+  }
+}
+
+export default merge(configBase, configEnv[env])

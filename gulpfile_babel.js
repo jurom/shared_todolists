@@ -5,6 +5,8 @@ import env from 'gulp-env'
 import {webpackDevServer} from './webpack/server/main'
 import makeWebpackConfig from './webpack/makeConfig'
 import runSequence from 'run-sequence'
+import clean from 'gulp-clean'
+import webpackBuild from './webpack/build'
 
 
 /*eslint-disable no-console */
@@ -41,3 +43,10 @@ gulp.task('disable-babel-cache', () => {
 })
 
 gulp.task('server-hot', webpackDevServer(makeWebpackConfig(true)))
+
+gulp.task('build', ['clean'], webpackBuild(makeWebpackConfig(false)))
+
+gulp.task('clean', function() {
+  return gulp.src('./build')
+    .pipe(clean({force: true}))
+})
