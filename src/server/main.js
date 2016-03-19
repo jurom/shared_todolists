@@ -1,6 +1,5 @@
 import express from 'express'
 import frontend from './frontend'
-import {Server} from 'http'
 import {Promise} from 'bluebird'
 
 /*
@@ -11,13 +10,12 @@ import {Promise} from 'bluebird'
 export function runServerConfig(config) {
 
   const app = express()
-  const server = Server(app)
 
   // Load react-js frontend.
   app.use(frontend)
 
   return new Promise((resolve, reject) => {
-    server.listen(config.port, '127.0.0.1', () => {
+    app.listen(config.port, '0.0.0.0', 511, () => {
       console.log('Server started at port %s', config.port)
       resolve(null)
     })
@@ -30,6 +28,7 @@ export function runServerConfig(config) {
 
 export function runServer() {
   let config = require('./config').default
+  console.log('CONFIG: ', config)
   console.log('Running server with env: ', config.env)
   return runServerConfig(config)
 }
