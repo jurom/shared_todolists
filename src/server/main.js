@@ -28,7 +28,6 @@ export function runServerConfig(config) {
 
 export function runServer() {
   let config = require('./config').default
-  console.log('CONFIG: ', config)
   console.log('Running server with env: ', config.env)
   return runServerConfig(config)
 }
