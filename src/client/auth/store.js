@@ -29,13 +29,13 @@ const initialState = fromJS({
 export default function store(state = initialState, action, payload) {
   return ({
     [actions.set]: ([keyPath, value]) => {
-      return state.setIn(keyPath, value)
+      return state.setIn(keyPath, fromJS(value))
     },
     [actions.authUid]: (uid) => {
       return state.set('uid', uid)
     },
     [actions.validation]: ([keyPath, validity]) => {
-      return state.setIn(keyPath, validity)
-    }
+      return state.setIn(keyPath, fromJS(validity))
+    },
   }[action] || (() => state))(payload)
 }

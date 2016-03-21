@@ -29,8 +29,11 @@ export function create(dispatch, router, firebase, getState) {
         .then(() => authWithPassword(firebase, {email, password}))
         .catch((e) => {
           if (e.code === 'EMAIL_TAKEN') {
-            console.error('Email taken') // eslint-disable-line no-console
-            // TODO: Report error msg to form
+            dispatch(actions.validation, [['signup', 'validation', 'email'], {
+              valid: false,
+              showValidation: true,
+              error: 'This email is already taken.'
+            }])
           } else {
             console.error('Firebase error: ', e) // eslint-disable-line no-console
           }
@@ -40,7 +43,15 @@ export function create(dispatch, router, firebase, getState) {
     login(email, password) {
       return authWithPassword(firebase, {email, password})
         .catch((e) => {
-          console.error('Login error: ', e) // eslint-disable-line no-console
+          const dispatchError = (field, error) =>
+            dispatch(actions.validation, [['login', 'validation', field], {
+              valid: false,
+              showValidation: true,
+              error
+            }])
+          if (e.code === 'INVALID_EMAIL') dispatchError('email', 'Please enter a valid email.')
+          else if (e.code === 'INVALID_USER') dispatchError('email', 'This user does not exist.')
+          else if (e.code === 'INVALID_PASSWORD') dispatchError('password', 'Password is incorrect.')
           // TODO: Handle reporting error messages in cases of wrong email/password
         })
     },
