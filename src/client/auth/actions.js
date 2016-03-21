@@ -4,6 +4,7 @@ import {set, createUser, authWithPassword} from '../../common/firebase_actions'
 export const actions = createActions('auth', [
   'set',
   'authUid',
+  'validation',
 ])
 
 export function create(dispatch, router, firebase, getState) {
