@@ -15,9 +15,16 @@ export class Signup extends Component {
     auth: React.PropTypes.object.isRequired,
   };
 
+  onSubmit = (e) => {
+    // Prevent refresh
+    e.preventDefault()
+    const {actions: {auth: actions}, auth: {signup: {fields}}} = this.props
+    return actions.signup(fields)
+  }
+
   render() {
 
-    const {dispatch, actions: {auth: actions}, auth: {signup: {fields, validation}}} = this.props
+    const {dispatch, auth: {signup: {fields, validation}}} = this.props
 
     const onValidation = (name) => (validity) => {
       dispatch(actionNames.validation, [['signup', 'validation', name], validity])
@@ -36,30 +43,33 @@ export class Signup extends Component {
       <Grid>
         <Row>
           <Col mdOffset={3} md={6} >
-            <h1>Register</h1>
-            <Validate onValidation={onValidation('email')}>
-              <Input type="text" {...propsForInput('email')} />
-              <IsRequired />
-              <IsEmail />
-            </Validate>
-            <Validate onValidation={onValidation('password')}>
-              <Input type="password" {...propsForInput('password')} />
-              <IsRequired />
-              <HasLength min={8} msg={'Password should be at least 8 characters long'} />
-            </Validate>
-            <Validate onValidation={onValidation('firstName')}>
-              <Input type="text" {...propsForInput('firstName')} />
-              <IsRequired />
-            </Validate>
-            <Validate onValidation={onValidation('lastName')}>
-              <Input type="text" {...propsForInput('lastName')} />
-              <IsRequired />
-            </Validate>
-            <Button
-              onClick={(e) => actions.signup(fields)}
-              bsStyle="primary"
-              disabled={!formValid(validation)}
-            >Sign up</Button>
+            <form onSubmit={this.onSubmit}>
+              <h1>Register</h1>
+              <Validate onValidation={onValidation('email')}>
+                <Input type="text" {...propsForInput('email')} />
+                <IsRequired />
+                <IsEmail />
+              </Validate>
+              <Validate onValidation={onValidation('password')}>
+                <Input type="password" {...propsForInput('password')} />
+                <IsRequired />
+                <HasLength min={8} msg={'Password should be at least 8 characters long'} />
+              </Validate>
+              <Validate onValidation={onValidation('firstName')}>
+                <Input type="text" {...propsForInput('firstName')} />
+                <IsRequired />
+              </Validate>
+              <Validate onValidation={onValidation('lastName')}>
+                <Input type="text" {...propsForInput('lastName')} />
+                <IsRequired />
+              </Validate>
+              <Button
+                type="submit"
+                onClick={this.onSubmit}
+                bsStyle="primary"
+                disabled={!formValid(validation)}
+              >Sign up</Button>
+            </form>
           </Col>
         </Row>
       </Grid>

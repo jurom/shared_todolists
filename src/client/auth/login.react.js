@@ -15,12 +15,17 @@ export class Login extends Component {
     auth: React.PropTypes.object.isRequired,
   };
 
+  onSubmit = (e) => {
+    e.preventDefault()
+    const {auth: {login: {fields: {email, password}}}, actions: {auth: actions}} = this.props
+    return actions.login(email, password)
+  }
+
   render() {
 
     const {
       dispatch,
-      actions: {auth: actions},
-      auth: {login: {fields: {email, password}, fields, validation}}
+      auth: {login: {fields, validation}}
     } = this.props
 
     const onValidation = (name) => (validity) => {
@@ -41,27 +46,30 @@ export class Login extends Component {
       <Grid>
         <Row>
           <Col mdOffset={3} md={6} >
-            <h1>Login</h1>
-            <Validate onValidation={onValidation('email')} >
-              <Input
-                type="text"
-                {...propsForInput('email')}
-              />
-              <IsRequired />
-              <IsEmail />
-            </Validate>
-            <Validate onValidation={onValidation('password')} >
-              <Input
-                type="password"
-                {...propsForInput('password')}
-              />
-              <IsRequired msg={'Please enter your password.'} />
-            </Validate>
-            <Button
-              onClick={(e) => actions.login(email, password)}
-              bsStyle="primary"
-              disabled={!formValid(validation)}
-            >Submit</Button>
+            <form onSubmit={this.onSubmit} >
+              <h1>Login</h1>
+              <Validate onValidation={onValidation('email')} >
+                <Input
+                  type="text"
+                  {...propsForInput('email')}
+                />
+                <IsRequired />
+                <IsEmail />
+              </Validate>
+              <Validate onValidation={onValidation('password')} >
+                <Input
+                  type="password"
+                  {...propsForInput('password')}
+                />
+                <IsRequired msg={'Please enter your password.'} />
+              </Validate>
+              <Button
+                type="submit"
+                onClick={this.onSubmit}
+                bsStyle="primary"
+                disabled={!formValid(validation)}
+              >Submit</Button>
+            </form>
           </Col>
         </Row>
       </Grid>
