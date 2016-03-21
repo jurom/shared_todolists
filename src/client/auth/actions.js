@@ -28,7 +28,7 @@ export function create(dispatch, router, firebase, getState) {
         .then(() => authWithPassword(firebase, {email, password}))
         .catch((e) => {
           if (e.code === 'EMAIL_TAKEN') {
-            console.error('Email taken')
+            console.error('Email taken') // eslint-disable-line no-console
             // TODO: Report error msg to form
           } else {
             console.error('Firebase error: ', e) // eslint-disable-line no-console
@@ -39,7 +39,7 @@ export function create(dispatch, router, firebase, getState) {
     login(email, password) {
       return authWithPassword(firebase, {email, password})
         .catch((e) => {
-          console.error('Login error: ', e)
+          console.error('Login error: ', e) // eslint-disable-line no-console
           // TODO: Handle reporting error messages in cases of wrong email/password
         })
     },
