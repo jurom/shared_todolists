@@ -1,6 +1,8 @@
 import React from 'react'
 import {Component} from 'vlux'
+import {requireAuth} from '../auth/require_registration_state.react'
 
+@requireAuth
 export class Dashboard extends Component {
 
   static propTypes = {

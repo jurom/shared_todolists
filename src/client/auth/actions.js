@@ -18,6 +18,8 @@ export function create(dispatch, router, firebase, getState) {
     ])
   }
 
+  const redirectTo = (route) => router.push(route)
+
   return {
 
     signup({email, password, firstName, lastName}) {
@@ -42,8 +44,11 @@ export function create(dispatch, router, firebase, getState) {
         })
     },
 
-    handleAuth(uid) {
+    redirectTo,
+
+    handleAuth(data) {
       const oldUid = getState().getIn(['auth', 'uid'])
+      const uid = data ? data.uid : null
 
       // Nothing changed
       if (oldUid === uid) return

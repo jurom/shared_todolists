@@ -2,6 +2,7 @@ import {Component} from 'vlux'
 import React from 'react'
 import {Grid, Row, Col, Button, Input} from 'react-bootstrap'
 import {actions as actionNames} from './actions'
+import {requireUnauth} from './require_registration_state.react'
 
 const nameToPlaceholder = {
   email: 'Email',
@@ -10,6 +11,7 @@ const nameToPlaceholder = {
   lastName: 'Last name',
 }
 
+@requireUnauth
 export class Signup extends Component {
 
   static propTypes = {

@@ -2,6 +2,7 @@ import React from 'react'
 import {create} from '../actions'
 import {dispatcher, dispatch} from '../dispatcher'
 import Firebase from 'firebase'
+import {ListenUser} from '../user/listen_user.react'
 
 export class App extends React.Component {
 
@@ -31,9 +32,14 @@ export class App extends React.Component {
 
   render() {
 
-    const props = {...this.state, actions: this.actions, dispatch}
+    const [firebase, actions] = [this.firebase, this.actions]
+    const props = {...this.state, actions, firebase, dispatch}
+
+    const {auth: {uid = null}} = props
+
     return (
       <div>
+        {uid && <ListenUser {...{firebase, dispatch, uid}} />}
         {React.cloneElement(this.props.children, props)}
       </div>
     )
