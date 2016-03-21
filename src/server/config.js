@@ -13,11 +13,17 @@ const configEnv = {
     presentedHost: 'http://localhost:8000',
     port: 8000,
     useWebpackDevServer: true,
+    firebase: {
+      url: 'https://todosharedevel.firebaseio.com/',
+    },
   },
   heroku: {
     presentedHost: 'https://infinite-shelf-71200.herokuapp.com/',
     port: process.env.PORT,
     useWebpackDevServer: false,
+    firebase: {
+      url: 'https://todoshareheroku.firebaseio.com/',
+    },
   }
 }
 

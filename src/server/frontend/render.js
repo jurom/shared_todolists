@@ -10,7 +10,10 @@ export default function render(req, res) {
 function renderPage(req, res) {
   return new Promise((resolve, reject) => {
 
-    const appConfig = {}
+    // Send part of config to client
+    const appConfig = {
+      firebase: config.firebase.url
+    }
     const html = getPageHtml({hostname: req.hostname, appConfig})
     res.status(200).send(html)
     resolve()

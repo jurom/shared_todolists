@@ -1,6 +1,7 @@
 import React from 'react'
 import {create} from '../actions'
 import {dispatcher, dispatch} from '../dispatcher'
+import Firebase from 'firebase'
 
 export class App extends React.Component {
 
@@ -15,7 +16,10 @@ export class App extends React.Component {
   }
 
   componentWillMount() {
-    this.actions = create(dispatch, this.context.router, () => dispatcher.state)
+    // Parse config data from server
+    this.config = JSON.parse(document.getElementsByTagName('body')[0].attributes.data.value)
+    this.firebase = new Firebase(this.config.firebase)
+    this.actions = create(dispatch, this.context.router, this.firebase, () => dispatcher.state)
 
     const changeState = (state) => this.setState(state.toObject())
     dispatcher.on('change', changeState)
