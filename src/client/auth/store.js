@@ -2,7 +2,7 @@ import {fromJS, Map} from 'immutable'
 import {actions} from './actions'
 
 const initEmpty = (...fields) => {
-  return Map(fromJS(fields).map((field) => [field]))
+  return Map(fromJS(fields).map((field) => [field, '']))
 }
 
 const initialState = fromJS({
