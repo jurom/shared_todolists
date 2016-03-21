@@ -2,6 +2,8 @@ import React from 'react'
 import {create} from '../actions'
 import {dispatcher, dispatch} from '../dispatcher'
 import Firebase from 'firebase'
+import {ListenUser} from '../user/listen_user.react'
+import {Header} from './header.react'
 
 export class App extends React.Component {
 
@@ -24,14 +26,25 @@ export class App extends React.Component {
     const changeState = (state) => this.setState(state.toObject())
     dispatcher.on('change', changeState)
     changeState(dispatcher.state)
+
+    // Handle firebase authentication
+    this.firebase.onAuth(this.actions.auth.handleAuth)
   }
 
   render() {
 
-    const props = {...this.state, actions: this.actions}
+    const [firebase, actions] = [this.firebase, this.actions]
+    const props = {...this.state, actions, firebase, dispatch}
+
+    const {auth: {uid = null}, auth, users} = props
+    let user = null
+    if (uid != null) user = users.get(uid)
+
     return (
       <div>
-        {React.cloneElement(this.props.children, props)}
+        {uid && <ListenUser {...{firebase, dispatch, uid}} />}
+        <Header {...{users, auth, actions}} />
+        {React.cloneElement(this.props.children, {...props, user})}
       </div>
     )
   }

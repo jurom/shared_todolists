@@ -19,6 +19,8 @@ export default class Html extends Component {
             src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser-polyfill.min.js"
           />
           <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en" />
+          <link rel="stylesheet" type="text/css"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
         </head>
         <body
           style={{}}
