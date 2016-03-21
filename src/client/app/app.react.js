@@ -24,11 +24,14 @@ export class App extends React.Component {
     const changeState = (state) => this.setState(state.toObject())
     dispatcher.on('change', changeState)
     changeState(dispatcher.state)
+
+    // Handle firebase authentication
+    this.firebase.onAuth(this.actions.auth.handleAuth)
   }
 
   render() {
 
-    const props = {...this.state, actions: this.actions}
+    const props = {...this.state, actions: this.actions, dispatch}
     return (
       <div>
         {React.cloneElement(this.props.children, props)}
