@@ -4,7 +4,7 @@ import {Grid, Row, Col, Button, Input} from 'react-bootstrap'
 import {actions as actionNames} from './actions'
 import {requireUnauth} from './require_registration_state.react'
 import {Validate, IsRequired, IsEmail, HasLength} from 'react-custom-validation'
-import {validityProps, nameToPlaceholder} from './helpers'
+import {validityProps, nameToPlaceholder, formValid} from './helpers'
 
 @requireUnauth
 export class Signup extends Component {
@@ -58,6 +58,7 @@ export class Signup extends Component {
             <Button
               onClick={(e) => actions.signup(fields)}
               bsStyle="primary"
+              disabled={!formValid(validation)}
             >Sign up</Button>
           </Col>
         </Row>

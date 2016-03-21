@@ -3,7 +3,7 @@ import React from 'react'
 import {Grid, Row, Col, Button, Input} from 'react-bootstrap'
 import {actions as actionNames} from './actions'
 import {requireUnauth} from './require_registration_state.react'
-import {validityProps, nameToPlaceholder} from './helpers'
+import {validityProps, nameToPlaceholder, formValid} from './helpers'
 import {Validate, IsRequired, IsEmail} from 'react-custom-validation'
 
 @requireUnauth
@@ -60,6 +60,7 @@ export class Login extends Component {
             <Button
               onClick={(e) => actions.login(email, password)}
               bsStyle="primary"
+              disabled={!formValid(validation)}
             >Submit</Button>
           </Col>
         </Row>

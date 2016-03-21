@@ -11,6 +11,9 @@ export const validityProps = (validation) => (name) => {
   }
 }
 
+export const formValid = (validation) =>
+  validation.every(({valid}) => valid === true)
+
 export const nameToPlaceholder = {
   email: 'Email',
   password: 'Password',

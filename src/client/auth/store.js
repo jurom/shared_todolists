@@ -2,15 +2,15 @@ import {fromJS, Map} from 'immutable'
 import {actions} from './actions'
 
 const initEmpty = (...fields) => {
-  return Map(fromJS(fields).map((field) => [field, '']))
+  return Map(fields.map((field) => [field, '']))
 }
 
 const getDefaultValidity = (...fields) => {
-  return Map(fromJS(fields).map((field) => ({
+  return Map(fields.map((field) => [field, {
     valid: null,
     error: null,
     showValidation: false
-  })))
+  }]))
 }
 
 const initFields = (...fields) => {
