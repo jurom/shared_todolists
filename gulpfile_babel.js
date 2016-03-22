@@ -7,7 +7,12 @@ import makeWebpackConfig from './webpack/makeConfig'
 import runSequence from 'run-sequence'
 import clean from 'gulp-clean'
 import webpackBuild from './webpack/build'
-
+import yargs from 'yargs'
+import config from './src/server/config'
+import Firebase from 'firebase'
+import {rand, repeatAsync} from './src/common/useful'
+import {createUser} from './src/common/firebase_actions'
+import {storeUser} from './src/common/auth_actions'
 
 /*eslint-disable no-console */
 
@@ -49,4 +54,24 @@ gulp.task('build', ['clean'], webpackBuild(makeWebpackConfig(false)))
 gulp.task('clean', function() {
   return gulp.src('./build')
     .pipe(clean({force: true}))
+})
+
+const firstNames = ['Alan', 'Bob', 'Bart', 'Martin', 'Sid', 'Harry', 'Herbert', 'Kurt']
+const lastNames = ['Marley', 'Delon', 'Simpson', 'Newsborne', 'Hedgehog', 'Neverliving', 'Newhouse', 'Oldarry']
+
+function getRandomProfile(id = '') {
+  const firstName = firstNames[rand(firstNames.length)]
+  const lastName = lastNames[rand(lastNames.length)]
+  const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${id}@todoshare.com`
+  return {firstName, lastName, email}
+}
+
+gulp.task('init-users', () => {
+  const firebase = new Firebase(config.firebase.url)
+  return repeatAsync(yargs.argv.n || 10, (i) => {
+    const profile = getRandomProfile(i)
+    const {email} = profile
+    return createUser(firebase, {email, password: 'password'})
+      .then(({uid}) => storeUser(firebase, {uid, email, profile}))
+  })
 })

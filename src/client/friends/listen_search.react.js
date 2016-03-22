@@ -9,7 +9,7 @@ import {nextString} from '../../common/useful'
 const listenOnFriendBy = (searchBy) => listenFirebase(
   (props) => props.firebase.child(`user/profile`)
     .orderByChild(searchBy)
-    .startAt(props.search)
+    .startAt(props.search.toLowerCase())
     .endAt(nextString(props.search))
     .limitToFirst(8),
   (e, props, data) => props.dispatch(actions.onFriendIds, [searchBy, Object.keys(data.val() || {})])

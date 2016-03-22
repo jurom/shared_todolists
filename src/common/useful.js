@@ -29,3 +29,21 @@ export function jsify(obj) {
 export function nextString(string) {
   return (parseInt(string, 36) + 1).toString(36)
 }
+
+export function rand(max) {
+  return Math.floor(Math.random() * max)
+}
+
+export function repeatAsync(n, f) {
+  let res = Promise.resolve()
+  repeat(n, (i) => {
+    res = res.then((_) => f(i))
+  })
+  return res
+}
+
+export function repeat(num, fn) {
+  for (let i = 0; i < num; i++) {
+    fn(i)
+  }
+}
