@@ -12,7 +12,7 @@ function unregToLogin(regStatus, actions) {
 
 function regToDashboard(regStatus, actions) {
   if (regStatus === REGISTERED) {
-    actions.redirectTo('/')
+    actions.redirectTo('/dashboard')
     return true
   }
   return false

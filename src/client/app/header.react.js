@@ -46,7 +46,7 @@ export class Header extends Component {
       <Navbar>
         <Navbar.Header>
           <Navbar.Brand>
-            <a onClick={(e) => this.props.actions.auth.redirectTo('/')}>ToDoShare</a>
+            <a onClick={(e) => this.props.actions.auth.redirectTo('/dashboard')}>ToDoShare</a>
           </Navbar.Brand>
         </Navbar.Header>
         {this.renderNavItems()}
