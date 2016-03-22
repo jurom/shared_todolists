@@ -41,3 +41,24 @@ export class ListenUser extends Component {
     )
   }
 }
+
+export class ListenUsers extends Component {
+
+  static propTypes = {
+    firebase: React.PropTypes.object.isRequired,
+    dispatch: React.PropTypes.func.isRequired,
+    ids: React.PropTypes.object.isRequired,
+  }
+
+  render() {
+
+    const {firebase, dispatch, ids} = this.props
+    return (
+      <div>
+        {ids.map((uid) =>
+          <ListenUser {...{uid, firebase, dispatch, key: uid}} />
+        )}
+      </div>
+    )
+  }
+}

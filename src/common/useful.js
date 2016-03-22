@@ -25,3 +25,7 @@ export function jsify(obj) {
     return obj
   }
 }
+
+export function nextString(string) {
+  return (parseInt(string, 36) + 1).toString(36)
+}
