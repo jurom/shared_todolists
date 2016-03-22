@@ -6,6 +6,7 @@ import {ListenUser} from '../user/listen_user.react'
 import {Header} from './header.react'
 import {registrationStatus, LOADING} from '../auth/registration_status'
 import {Loading} from '../helpers/loading.react'
+import {Settings} from '../settings/settings.react'
 
 export class App extends React.Component {
 
@@ -49,7 +50,8 @@ export class App extends React.Component {
       <div>
         {uid && <ListenUser {...{firebase, dispatch, uid}} />}
         <Loading isReady={isReady}>
-          <Header {...{users, auth, actions, user}} />
+          <Header {...{users, auth, actions, user, dispatch}} />
+          <Settings {...{...props, user}} />
           {React.cloneElement(this.props.children, {...props, user})}
         </Loading>
       </div>

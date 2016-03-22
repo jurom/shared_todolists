@@ -2,12 +2,14 @@ import React from 'react'
 import {Component} from 'vlux'
 import {registrationStatus, UNREGISTERED} from '../auth/registration_status'
 import {Navbar, NavItem, Nav, NavDropdown, MenuItem} from 'react-bootstrap'
+import {actions as settingsActions} from '../settings/actions'
 
 export class Header extends Component {
 
   static propTypes = {
     actions: React.PropTypes.object.isRequired,
     auth: React.PropTypes.object.isRequired,
+    dispatch: React.PropTypes.func.isRequired,
     users: React.PropTypes.object.isRequired,
     user: React.PropTypes.object,
   }
@@ -35,11 +37,11 @@ export class Header extends Component {
   }
 
   renderRegistered() {
-    const {user: {profile: {email}}} = this.props
+    const {user: {profile: {email}}, dispatch} = this.props
     return (
       <Nav pullRight>
         <NavDropdown id="profile-dropdown" title={email}>
-          <MenuItem >Settings</MenuItem>
+          <MenuItem onClick={(e) => dispatch(settingsActions.toggleShow, true)} >Settings</MenuItem>
           <MenuItem onClick={(e) => this.props.actions.auth.logout()} >Logout</MenuItem>
         </NavDropdown>
       </Nav>

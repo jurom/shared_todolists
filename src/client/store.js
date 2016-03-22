@@ -1,6 +1,7 @@
 import dashboard from './dashboard/store'
 import auth from './auth/store'
 import users from './user/store'
+import settings from './settings/store'
 
 import {fromJS} from 'immutable'
 
@@ -19,5 +20,6 @@ export default function store(state = initialState, action, payload) {
   state = state.update('auth', (s) => auth(s, action, payload))
   state = state.update('dashboard', (s) => dashboard(s, action, payload))
   state = state.update('users', (s) => users(s, action, payload))
+  state = state.update('settings', (s) => settings(s, action, payload))
   return state
 }
