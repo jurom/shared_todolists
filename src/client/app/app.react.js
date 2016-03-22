@@ -4,6 +4,8 @@ import {dispatcher, dispatch} from '../dispatcher'
 import Firebase from 'firebase'
 import {ListenUser} from '../user/listen_user.react'
 import {Header} from './header.react'
+import {registrationStatus, LOADING} from '../auth/registration_status'
+import {Loading} from '../helpers/loading.react'
 
 export class App extends React.Component {
 
@@ -40,11 +42,16 @@ export class App extends React.Component {
     let user = null
     if (uid != null) user = users.get(uid)
 
+    const regStatus = registrationStatus(users, auth)
+
+    const isReady = (regStatus !== LOADING)
     return (
       <div>
         {uid && <ListenUser {...{firebase, dispatch, uid}} />}
-        <Header {...{users, auth, actions}} />
-        {React.cloneElement(this.props.children, {...props, user})}
+        <Loading isReady={isReady}>
+          <Header {...{users, auth, actions, user}} />
+          {React.cloneElement(this.props.children, {...props, user})}
+        </Loading>
       </div>
     )
   }

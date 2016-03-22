@@ -1,7 +1,7 @@
 import React from 'react'
 import {Component} from 'vlux'
 import {registrationStatus, UNREGISTERED} from '../auth/registration_status'
-import {Navbar, NavItem, Nav} from 'react-bootstrap'
+import {Navbar, NavItem, Nav, NavDropdown, MenuItem} from 'react-bootstrap'
 
 export class Header extends Component {
 
@@ -9,6 +9,7 @@ export class Header extends Component {
     actions: React.PropTypes.object.isRequired,
     auth: React.PropTypes.object.isRequired,
     users: React.PropTypes.object.isRequired,
+    user: React.PropTypes.object,
   }
 
   navigate(route) {
@@ -26,7 +27,7 @@ export class Header extends Component {
 
   renderUnregistered() {
     return (
-      <Nav>
+      <Nav pullRight>
         <NavItem onClick={(e) => this.navigate('/login')}>Login</NavItem>
         <NavItem onClick={(e) => this.navigate('/signup')}>Register</NavItem>
       </Nav>
@@ -34,9 +35,13 @@ export class Header extends Component {
   }
 
   renderRegistered() {
+    const {user: {profile: {email}}} = this.props
     return (
-      <Nav>
-        <NavItem onClick={(e) => this.props.actions.auth.logout()}>Logout</NavItem>
+      <Nav pullRight>
+        <NavDropdown id="profile-dropdown" title={email}>
+          <MenuItem >Settings</MenuItem>
+          <MenuItem onClick={(e) => this.props.actions.auth.logout()} >Logout</MenuItem>
+        </NavDropdown>
       </Nav>
     )
   }
