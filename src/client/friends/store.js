@@ -8,8 +8,8 @@ export function getUserIdsToListen(friendIds) {
 const initialState = fromJS({
   friendIds: {
     email: new OrderedSet(),
-    firstName: new OrderedSet(),
-    lastName: new OrderedSet(),
+    firstLast: new OrderedSet(),
+    lastFirst: new OrderedSet(),
   },
   search: '',
 })
