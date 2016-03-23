@@ -7,6 +7,7 @@ import {Header} from './header.react'
 import {registrationStatus, LOADING} from '../auth/registration_status'
 import {Loading} from '../helpers/loading.react'
 import {Settings} from '../settings/settings.react'
+import {read} from '../../common/firebase_actions'
 
 export class App extends React.Component {
 
@@ -20,6 +21,15 @@ export class App extends React.Component {
     router: React.PropTypes.object.isRequired,
   }
 
+  logoutIfDeleted() {
+    const data = this.firebase.getAuth()
+    if (data) {
+      // If user's profile does not exist => user was deleted
+      return read(this.firebase.child(`user/profile/${data.uid}`))
+        .then((data) => data || this.actions.auth.logout())
+    }
+  }
+
   componentWillMount() {
     // Parse config data from server
     this.config = JSON.parse(document.getElementsByTagName('body')[0].attributes.data.value)
@@ -30,6 +40,8 @@ export class App extends React.Component {
     dispatcher.on('change', changeState)
     changeState(dispatcher.state)
 
+    // If the user does not exist, log him out (should happen only in development)
+    this.logoutIfDeleted()
     // Handle firebase authentication
     this.firebase.onAuth(this.actions.auth.handleAuth)
   }

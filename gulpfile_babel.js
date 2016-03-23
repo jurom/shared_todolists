@@ -11,8 +11,9 @@ import yargs from 'yargs'
 import config from './src/server/config'
 import Firebase from 'firebase'
 import {rand, repeatAsync} from './src/common/useful'
-import {createUser} from './src/common/firebase_actions'
+import {createUser, read, set, removeUser} from './src/common/firebase_actions'
 import {storeUser} from './src/common/auth_actions'
+import {fromJS} from 'immutable'
 
 /*eslint-disable no-console */
 
@@ -56,6 +57,10 @@ gulp.task('clean', function() {
     .pipe(clean({force: true}))
 })
 
+function getFirebase() {
+  return new Firebase(config.firebase.url)
+}
+
 const firstNames = ['Alan', 'Bob', 'Bart', 'Martin', 'Sid', 'Harry', 'Herbert', 'Kurt']
 const lastNames = ['Marley', 'Delon', 'Simpson', 'Newsborne', 'Hedgehog', 'Neverliving', 'Newhouse', 'Oldarry']
 
@@ -74,4 +79,26 @@ gulp.task('init-users', () => {
     return createUser(firebase, {email, password: 'password'})
       .then(({uid}) => storeUser(firebase, {uid, email, profile}))
   })
+})
+
+gulp.task('delete-users', () => {
+  const firebase = getFirebase()
+  return read(firebase.child(`user/profile`))
+    .then((profiles) => profiles && fromJS(profiles)
+      .valueSeq()
+      .map(({email}) => email)
+      .filter((email) => email.endsWith('@todoshare.com'))
+      .toJS()
+    )
+    .then((emails) => emails && repeatAsync(emails.length, (i) =>
+      removeUser(firebase, {email: emails[i], password: 'password'})))
+})
+
+gulp.task('delete-db', () => {
+  const firebase = getFirebase()
+  return set(firebase, null)
+})
+
+gulp.task('reset-db', (done) => {
+  runSequence('delete-users', 'delete-db', 'init-users', done)
 })
