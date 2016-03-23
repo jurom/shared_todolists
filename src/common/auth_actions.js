@@ -1,4 +1,23 @@
-import {set} from './firebase_actions'
+import {set, read} from './firebase_actions'
+
+export function getProfileSearchIndices(profile) {
+  const first = profile.firstName.toUpperCase()
+  const last = profile.lastName.toUpperCase()
+  return {
+    firstLast: `${first}_${last}`,
+    lastFirst: `${last}_${first}`,
+    email: profile.email.toUpperCase()
+  }
+}
+
+export function encodeSearch(search) {
+  return search.toUpperCase().replace(/\ /g, '_')
+}
+
+export const updateSearchIndices = (firebase, uid) => {
+  return read(firebase.child(`user/profile/${uid}`))
+    .then((profile) => set(firebase.child(`index/user/profile/${uid}`), getProfileSearchIndices(profile)))
+}
 
 export const storeUser = (firebase, {uid, email, profile}) => {
   return Promise.all([
@@ -8,4 +27,5 @@ export const storeUser = (firebase, {uid, email, profile}) => {
       blocked: false
     })
   ])
+  .then(() => updateSearchIndices(firebase, uid))
 }

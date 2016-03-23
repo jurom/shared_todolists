@@ -26,10 +26,6 @@ export function jsify(obj) {
   }
 }
 
-export function nextString(string) {
-  return (parseInt(string, 36) + 1).toString(36)
-}
-
 export function rand(max) {
   return Math.floor(Math.random() * max)
 }

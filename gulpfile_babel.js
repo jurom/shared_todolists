@@ -78,6 +78,7 @@ gulp.task('init-users', () => {
     const {email} = profile
     return createUser(firebase, {email, password: 'password'})
       .then(({uid}) => storeUser(firebase, {uid, email, profile}))
+      .catch((e) => console.log('Error, skipping: ', email, 'error: ', e))
   })
 })
 

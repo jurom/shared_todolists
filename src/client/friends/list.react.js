@@ -4,7 +4,7 @@ import {Row, Col, Input, Thumbnail} from 'react-bootstrap'
 import {actions as actionNames} from './actions'
 import {ListenFriends} from './listen_search.react'
 import {getUserIdsToListen} from './store'
-import {isLoaded, getName} from '../user/helpers'
+import {isLoaded} from '../user/helpers'
 
 export class FriendList extends Component {
 
@@ -17,9 +17,10 @@ export class FriendList extends Component {
 
   renderUser(user) {
     // TODO: Make tis somehow user dependent .. (gravatar based on email?)
+    const {profile: {firstName, lastName}} = user
     return (
       <Thumbnail src="http://www.gravatar.com/avatar" alt="">
-        <h3>{getName(user)}</h3>
+        <h3>{firstName}<br />{lastName}</h3>
         <small>{user.getIn(['profile', 'email'])}</small>
       </Thumbnail>
     )

@@ -4,13 +4,13 @@ import {listenFirebase} from '../helpers/listen_firebase.react'
 import {actions} from './actions'
 import {getUserIdsToListen} from './store'
 import {ListenUsers} from '../user/listen_user.react'
-import {nextString} from '../../common/useful'
+import {encodeSearch} from '../../common/auth_actions'
 
 const listenOnFriendBy = (searchBy) => listenFirebase(
-  (props) => props.firebase.child(`user/profile`)
+  (props) => props.firebase.child(`index/user/profile`)
     .orderByChild(searchBy)
-    .startAt(props.search.toLowerCase())
-    .endAt(nextString(props.search))
+    .startAt(encodeSearch(props.search))
+    .endAt(encodeSearch(props.search) + 'a')
     .limitToFirst(8),
   (e, props, data) => props.dispatch(actions.onFriendIds, [searchBy, Object.keys(data.val() || {})])
 )
@@ -26,21 +26,21 @@ export class ListenFriends extends Component {
 
   shouldSearch() {
     const {search} = this.props
-    return search.length >= 3
+    return search.length >= 1
   }
 
   render() {
     const ListenEmails = listenOnFriendBy('email')
-    const ListenFirstNames = listenOnFriendBy('firstName')
-    const ListenLastNames = listenOnFriendBy('lastName')
+    const ListenFirstLast = listenOnFriendBy('firstLast')
+    const ListenLastFirst = listenOnFriendBy('lastFirst')
 
     const {search, firebase, dispatch, friendIds} = this.props
 
     return (
       <div>
         {this.shouldSearch() && <ListenEmails {...{firebase, dispatch, search}} />}
-        {this.shouldSearch() && <ListenFirstNames {...{firebase, dispatch, search}} />}
-        {this.shouldSearch() && <ListenLastNames {...{firebase, dispatch, search}} />}
+        {this.shouldSearch() && <ListenFirstLast {...{firebase, dispatch, search}} />}
+        {this.shouldSearch() && <ListenLastFirst {...{firebase, dispatch, search}} />}
         <ListenUsers ids={getUserIdsToListen(friendIds)} {...{firebase, dispatch}} />
       </div>
     )
