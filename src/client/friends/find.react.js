@@ -1,12 +1,12 @@
 import React from 'react'
 import {Component} from 'vlux'
-import {Row, Col, Input, Thumbnail, Button} from 'react-bootstrap'
+import {Row, Col, Input} from 'react-bootstrap'
 import {actions as actionNames} from './actions'
 import {ListenFriends} from './listen_search.react'
-import {getFriendIdsToListen, canSendRequest} from './helpers'
+import {getSearchedFriendsIds} from './helpers'
 import {isLoaded} from '../user/helpers'
-import {gravatarSrc} from '../helpers/gravatar'
 import {requireAuth} from '../auth/require_registration_state.react.js'
+import {Friend} from './friend.react'
 
 @requireAuth
 export class FindFriends extends Component {
@@ -17,35 +17,16 @@ export class FindFriends extends Component {
     friends: React.PropTypes.object.isRequired,
     dispatch: React.PropTypes.func.isRequired,
     firebase: React.PropTypes.object.isRequired,
-  }
-
-  renderUser(user, requests, actions) {
-    const {profile: {firstName, lastName, gravatarHash}} = user
-    return (
-      <Thumbnail src={gravatarSrc({hash: gravatarHash})} alt="">
-        <h3>{firstName}<br />{lastName}</h3>
-        <small>{user.getIn(['profile', 'email'])}</small>
-        {canSendRequest(user, requests) ?
-          <Button
-            bsStyle="primary"
-            onClick={() => actions.sendRequest(user)}
-          >Add friend</Button>
-        :
-          <Button
-            bsStyle="danger"
-            onClick={() => actions.cancelRequest(user)}
-          >Cancel friend request</Button>
-        }
-      </Thumbnail>
-    )
+    user: React.PropTypes.object.isRequired,
   }
 
   render() {
 
-    const {users, friends, friends: {search: {search}, requests}, dispatch, firebase} = this.props
+    const {users, friends, friends: {search: {search}}, dispatch, firebase, user} = this.props
     const {actions: {friends: actions}} = this.props
 
-    const searchedUsers = getFriendIdsToListen(friends)
+    const searchedUsers = getSearchedFriendsIds(friends)
+      .filter((id) => user.get('id') !== id)
       .map((id) => users.get(id))
       .filter(isLoaded)
 
@@ -65,7 +46,7 @@ export class FindFriends extends Component {
         <Row>
           {searchedUsers.map((user) =>
             <Col md={3} key={user.get('id')}>
-              {this.renderUser(user, requests, actions)}
+              <Friend {...{user, friends, actions}} />
             </Col>)}
         </Row>
       </div>

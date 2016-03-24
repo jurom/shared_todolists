@@ -1,11 +1,32 @@
 import React from 'react'
 import {Component} from 'vlux'
+import {isLoaded} from '../user/helpers'
+import {Row, Col} from 'react-bootstrap'
+import {Friend} from './friend.react'
 
 export class Requests extends Component {
 
+  static propTypes = {
+    friends: React.PropTypes.object.isRequired,
+    users: React.PropTypes.object.isRequired,
+    actions: React.PropTypes.object.isRequired
+  }
+
   render() {
+
+    const {friends, friends: {requests: {received}}, users, actions: {friends: actions}} = this.props
+
+    const usersToShow = received.valueSeq()
+      .map(({requestingUserId}) => users.get(requestingUserId))
+      .filter(isLoaded)
     return (
-      <div>Friend requests will be here</div>
+      <Row>
+        {usersToShow.map((user) =>
+          <Col md={3}>
+            <Friend {...{user, friends, actions}} />
+          </Col>
+        )}
+      </Row>
     )
   }
 }
