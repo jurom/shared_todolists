@@ -1,10 +1,6 @@
 import {fromJS, OrderedSet} from 'immutable'
 import {actions} from './actions'
 
-export function getUserIdsToListen(friendIds) {
-  return friendIds.reduce((total, ids) => total.union(ids))
-}
-
 const initialState = fromJS({
   search: {
     search: '',

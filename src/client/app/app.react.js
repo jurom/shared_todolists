@@ -2,12 +2,13 @@ import React from 'react'
 import {create} from '../actions'
 import {dispatcher, dispatch} from '../dispatcher'
 import Firebase from 'firebase'
-import {ListenUser} from '../user/listen_user.react'
+import {ListenUsers} from '../user/listen_user.react'
 import {Header} from './header.react'
 import {registrationStatus, LOADING} from '../auth/registration_status'
 import {Loading} from '../helpers/loading.react'
 import {Settings} from '../settings/settings.react'
 import {read} from '../../common/firebase_actions'
+import {getUserIdsToListen} from '../user/helpers'
 
 export class App extends React.Component {
 
@@ -55,12 +56,13 @@ export class App extends React.Component {
     let user = null
     if (uid != null) user = users.get(uid)
 
+    const ids = getUserIdsToListen(this.state)
     const regStatus = registrationStatus(users, auth)
 
     const isReady = (regStatus !== LOADING)
     return (
       <div>
-        {uid && <ListenUser {...{firebase, dispatch, uid}} />}
+        <ListenUsers {...{firebase, dispatch, ids}} />
         <Loading isReady={isReady}>
           <Header {...{users, auth, actions, user, dispatch}} />
           <Settings {...{...props, user}} />

@@ -3,7 +3,7 @@ import {Component} from 'vlux'
 import {Row, Col, Input, Thumbnail} from 'react-bootstrap'
 import {actions as actionNames} from './actions'
 import {ListenFriends} from './listen_search.react'
-import {getUserIdsToListen} from './store'
+import {getFriendIdsToListen} from './helpers'
 import {isLoaded} from '../user/helpers'
 import {gravatarSrc} from '../helpers/gravatar'
 import {requireAuth} from '../auth/require_registration_state.react.js'
@@ -30,15 +30,15 @@ export class FindFriends extends Component {
 
   render() {
 
-    const {users, friends: {search: {search, friendIds}}, dispatch, firebase} = this.props
+    const {users, friends, friends: {search: {search}}, dispatch, firebase} = this.props
 
-    const searchedUsers = getUserIdsToListen(friendIds)
+    const searchedUsers = getFriendIdsToListen(friends)
       .map((id) => users.get(id))
       .filter(isLoaded)
 
     return (
       <div>
-        <ListenFriends {...{search, friendIds, dispatch, firebase}} />
+        <ListenFriends {...{search, dispatch, firebase}} />
         <Row>
           <Col md={6} >
             <Input
