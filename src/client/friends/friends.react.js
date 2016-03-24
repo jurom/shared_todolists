@@ -1,31 +1,29 @@
 import React from 'react'
 import {Component} from 'vlux'
-import {requireAuth} from '../auth/require_registration_state.react'
-import {Grid, Nav, NavItem, Row, Col} from 'react-bootstrap'
+import {Nav, NavItem, Row, Col} from 'react-bootstrap'
 import {fromJS} from 'immutable'
+import {requireAuth} from '../auth/require_registration_state.react'
 
 @requireAuth
-export class Dashboard extends Component {
+export class Friends extends Component {
 
   static propTypes = {
-    actions: React.PropTypes.object.isRequired,
-    dashboard: React.PropTypes.object.isRequired,
     children: React.PropTypes.element.isRequired,
   }
 
   static contextTypes = {
-    router: React.PropTypes.object.isRequired,
+    router: React.PropTypes.object.isRequired
   }
 
   renderNav(items) {
     const router = this.context.router
-    const absRoute = (route) => `/dashboard/${route}`
+    const absRoute = (route) => `/dashboard/friends/${route}`
     const selectedKey = items
       .map(({route}) => absRoute(route))
       .filter((route) => router.isActive(route))
       .first()
     return (
-      <Nav bsStyle="pills" stacked onSelect={(route) => router.push(route)} activeKey={selectedKey}>
+      <Nav bsStyle="tabs" onSelect={(route) => router.push(route)} activeKey={selectedKey}>
         {items.map(({route, label}) =>
           <NavItem eventKey={absRoute(route)} key={route} >{label}</NavItem>
         )}
@@ -34,23 +32,33 @@ export class Dashboard extends Component {
   }
 
   render() {
-    const {children, ...propsNoChildren} = this.props
+    const {...propsNoChildren, children} = this.props
     return (
-      <Grid>
+      <div>
         <Row>
-          <Col md={2}>
+          <Col md={12}>
             {this.renderNav(fromJS([
               {
-                route: 'friends',
-                label: 'Friends'
+                route: 'list',
+                label: 'My friends',
               },
+              {
+                route: 'requests',
+                label: 'Friend requests',
+              },
+              {
+                route: 'findfriends',
+                label: 'Find friends'
+              }
             ]))}
           </Col>
-          <Col md={10}>
+        </Row>
+        <Row>
+          <Col md={12}>
             {React.cloneElement(this.props.children, propsNoChildren)}
           </Col>
         </Row>
-      </Grid>
+      </div>
     )
   }
 }
