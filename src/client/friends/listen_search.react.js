@@ -2,8 +2,6 @@ import React from 'react'
 import {Component} from 'vlux'
 import {listenFirebase} from '../helpers/listen_firebase.react'
 import {actions} from './actions'
-import {getUserIdsToListen} from './store'
-import {ListenUsers} from '../user/listen_user.react'
 import {encodeSearch} from '../../common/auth_actions'
 
 const listenOnFriendBy = (searchBy) => listenFirebase(
@@ -12,7 +10,7 @@ const listenOnFriendBy = (searchBy) => listenFirebase(
     .startAt(encodeSearch(props.search))
     .endAt(encodeSearch(props.search) + 'a')
     .limitToFirst(8),
-  (e, props, data) => props.dispatch(actions.onFriendIds, [searchBy, Object.keys(data.val() || {})])
+  (e, props, data) => props.dispatch(actions.onSearchedFriendIds, [searchBy, Object.keys(data.val() || {})])
 )
 
 export class ListenFriends extends Component {
@@ -21,7 +19,6 @@ export class ListenFriends extends Component {
     search: React.PropTypes.string.isRequired,
     firebase: React.PropTypes.object.isRequired,
     dispatch: React.PropTypes.func.isRequired,
-    friendIds: React.PropTypes.object.isRequired,
   }
 
   shouldSearch() {
@@ -34,14 +31,13 @@ export class ListenFriends extends Component {
     const ListenFirstLast = listenOnFriendBy('firstLast')
     const ListenLastFirst = listenOnFriendBy('lastFirst')
 
-    const {search, firebase, dispatch, friendIds} = this.props
+    const {search, firebase, dispatch} = this.props
 
     return (
       <div>
         {this.shouldSearch() && <ListenEmails {...{firebase, dispatch, search}} />}
         {this.shouldSearch() && <ListenFirstLast {...{firebase, dispatch, search}} />}
         {this.shouldSearch() && <ListenLastFirst {...{firebase, dispatch, search}} />}
-        <ListenUsers ids={getUserIdsToListen(friendIds)} {...{firebase, dispatch}} />
       </div>
     )
 

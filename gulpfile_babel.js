@@ -27,6 +27,7 @@ gulp.task('eslint', () => {
   return gulp.src([
     'gulpfile_babel.js',
     'src/**/*.js',
+    '!src/firebase-transactions/**',
     'webpack/**/*.js',
   ])
   .pipe(eslint())

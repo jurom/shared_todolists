@@ -13,6 +13,7 @@ export default function store(state = initialState, action, payload) {
 
     [actions.onRole]: ([id, role]) => {
       return state.setIn([id, 'role'], fromJS(role))
-    }
+    },
+
   }[action] || (() => state))(payload)
 }

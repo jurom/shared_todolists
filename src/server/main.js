@@ -1,6 +1,8 @@
 import express from 'express'
 import frontend from './frontend'
 import {Promise} from 'bluebird'
+import Firebase from 'firebase'
+import {startTransactor} from './transactor/transactor'
 
 /*
  * Runs server with custom config. Returns {handler, started}.
@@ -13,6 +15,11 @@ export function runServerConfig(config) {
 
   // Load react-js frontend.
   app.use(frontend)
+
+
+  const firebase = new Firebase(config.firebase.url)
+  console.log('Starting transactor with env', config.env)
+  startTransactor(firebase)
 
   return new Promise((resolve, reject) => {
     app.listen(config.port, '0.0.0.0', 511, () => {
