@@ -30,7 +30,7 @@ export class FindFriends extends Component {
 
   render() {
 
-    const {users, friends: {search, friendIds}, dispatch, firebase} = this.props
+    const {users, friends: {search: {search, friendIds}}, dispatch, firebase} = this.props
 
     const searchedUsers = getUserIdsToListen(friendIds)
       .map((id) => users.get(id))

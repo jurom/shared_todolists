@@ -6,21 +6,23 @@ export function getUserIdsToListen(friendIds) {
 }
 
 const initialState = fromJS({
-  friendIds: {
-    email: new OrderedSet(),
-    firstLast: new OrderedSet(),
-    lastFirst: new OrderedSet(),
+  search: {
+    search: '',
+    friendIds: {
+      email: new OrderedSet(),
+      firstLast: new OrderedSet(),
+      lastFirst: new OrderedSet(),
+    },
   },
-  search: '',
 })
 
 export default function store(state = initialState, action, payload) {
   return ({
-    [actions.onFriendIds]: ([searchBy, ids]) => {
-      return state.setIn(['friendIds', searchBy], new OrderedSet(ids))
+    [actions.onSearchedFriendIds]: ([searchBy, ids]) => {
+      return state.setIn(['search', 'friendIds', searchBy], new OrderedSet(ids))
     },
     [actions.search]: (search) => {
-      return state.set('search', search)
+      return state.setIn(['search', 'search'], search)
     }
   }[action] || (() => state))(payload)
 }

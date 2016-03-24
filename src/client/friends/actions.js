@@ -2,7 +2,7 @@ import {createActions} from '../vlux'
 
 export const actions = createActions('friends', [
   'search',
-  'onFriendIds'
+  'onSearchedFriendIds'
 ])
 
 export function create(dispatch, router, firebase, getState) {

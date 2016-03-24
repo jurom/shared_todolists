@@ -12,7 +12,7 @@ const listenOnFriendBy = (searchBy) => listenFirebase(
     .startAt(encodeSearch(props.search))
     .endAt(encodeSearch(props.search) + 'a')
     .limitToFirst(8),
-  (e, props, data) => props.dispatch(actions.onFriendIds, [searchBy, Object.keys(data.val() || {})])
+  (e, props, data) => props.dispatch(actions.onSearchedFriendIds, [searchBy, Object.keys(data.val() || {})])
 )
 
 export class ListenFriends extends Component {
