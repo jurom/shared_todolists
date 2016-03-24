@@ -1,0 +1,3 @@
+[submodule "firebase-transactions"]
+	path = firebase-transactions
+	url = git@github.com:vacuumlabs/firebase-transactions.git
