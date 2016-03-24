@@ -9,6 +9,8 @@ import {Loading} from '../helpers/loading.react'
 import {Settings} from '../settings/settings.react'
 import {read} from '../../common/firebase_actions'
 import {getUserIdsToListen} from '../user/helpers'
+import {getClient} from '../../firebase-transactions/src/client'
+import {ListenFriends} from '../friends/listen_friends.react'
 
 export class App extends React.Component {
 
@@ -35,7 +37,11 @@ export class App extends React.Component {
     // Parse config data from server
     this.config = JSON.parse(document.getElementsByTagName('body')[0].attributes.data.value)
     this.firebase = new Firebase(this.config.firebase)
-    this.actions = create(dispatch, this.context.router, this.firebase, () => dispatcher.state)
+    this.submitTransaction =
+      getClient(this.firebase, {todoTrxRef: this.firebase.child('new_transaction')})
+
+    this.actions =
+      create(dispatch, this.context.router, this.firebase, () => dispatcher.state, this.submitTransaction)
 
     const changeState = (state) => this.setState(state.toObject())
     dispatcher.on('change', changeState)
@@ -63,6 +69,7 @@ export class App extends React.Component {
     return (
       <div>
         <ListenUsers {...{firebase, dispatch, ids}} />
+        {uid && <ListenFriends {...{firebase, dispatch, uid}} />}
         <Loading isReady={isReady}>
           <Header {...{users, auth, actions, user, dispatch}} />
           <Settings {...{...props, user}} />

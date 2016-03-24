@@ -57,6 +57,7 @@
     "immutable": "^3.7.6",
     "intl": "^1.1.0",
     "json-loader": "^0.5.4",
+    "log4js": "^0.6.27",
     "node-sass": "^3.4.2",
     "nodemon": "^1.9.1",
     "react": "^0.14.7",

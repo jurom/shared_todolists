@@ -3,15 +3,12 @@ import {create as auth} from './auth/actions'
 import {create as user} from './user/actions'
 import {create as settings} from './settings/actions'
 import {create as friends} from './friends/actions'
+import {Map} from 'immutable'
 
 // Action creator
-export const create = (dispatch, router, firebase, getState) => {
+export const create = (dispatch, router, firebase, getState, submitTransaction) => {
 
-  return {
-    auth: auth(dispatch, router, firebase, getState),
-    dashboard: dashboard(dispatch, router, firebase, getState),
-    user: user(dispatch, router, firebase, getState),
-    settings: settings(dispatch, router, firebase, getState),
-    friends: friends(dispatch, router, firebase, getState),
-  }
+  return Map({auth, dashboard, user, settings, friends})
+    .map((fn) => fn(dispatch, router, firebase, getState, submitTransaction))
+    .toJS()
 }

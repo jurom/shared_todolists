@@ -10,6 +10,11 @@ const initialState = fromJS({
       lastFirst: new OrderedSet(),
     },
   },
+  friendIds: new OrderedSet(),
+  requests: {
+    sent: {},
+    received: {},
+  },
 })
 
 export default function store(state = initialState, action, payload) {
@@ -19,6 +24,12 @@ export default function store(state = initialState, action, payload) {
     },
     [actions.search]: (search) => {
       return state.setIn(['search', 'search'], search)
+    },
+    [actions.onFriendIds]: (friendIds) => {
+      return state.set('friendIds', new OrderedSet(friendIds))
+    },
+    [actions.onFriendRequests]: ([key, requests]) => {
+      return state.setIn(['requests', key], fromJS(requests))
     }
   }[action] || (() => state))(payload)
 }

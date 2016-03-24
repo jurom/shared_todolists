@@ -14,7 +14,7 @@ function withUnpackedCredentials(handler, requireAuth) {
   }
 }
 
-export function startTransactor({firebase, braintreeGateway}) {
+export function startTransactor(firebase) {
 
   const friendRequest = fromJS({sendRequest, acceptRequest, cancelRequest, rejectRequest})
     .map((v) => withUnpackedCredentials(v, true))
