@@ -3,7 +3,6 @@ import {Component} from 'vlux'
 import {Accordion, Panel, Well, ButtonGroup, Button, Badge} from 'react-bootstrap'
 import {isCompleted, isDeleted, taskStyle} from './helpers'
 import {isLoaded, getName} from '../user/helpers'
-import {Loading} from '../helpers/loading.react'
 
 export class Task extends Component {
 
@@ -33,26 +32,24 @@ export class Task extends Component {
         </Badge>
       </span>
 
-    return (
-      <Loading isReady={isReady}>
-        {isReady && <Panel collapsible header={getHeader()} bsStyle={taskStyle(task)} eventKey={id}>
-          <Well>{content || 'No description.'}</Well>
-          {isTaskEditable && <ButtonGroup>
-            <Button
-              onClick={() => editTask(task, taskId)}
-              bsStyle="warning"
-            >Edit</Button>
-            <Button
-              onClick={() => completeTask(task, taskId)}
-              bsStyle="success"
-            >Complete</Button>
-            <Button
-              onClick={() => deleteTask(task, taskId)}
-              bsStyle="danger"
-            >Delete</Button>
-          </ButtonGroup>}
-        </Panel>}
-      </Loading>
+    return isReady && (
+      <Panel collapsible eventKey={id} header={getHeader()} bsStyle={taskStyle(task)} >
+        <Well>{content || 'No description.'}</Well>
+        {isTaskEditable && <ButtonGroup>
+          <Button
+            onClick={() => editTask(task, taskId)}
+            bsStyle="warning"
+          >Edit</Button>
+          <Button
+            onClick={() => completeTask(task, taskId)}
+            bsStyle="success"
+          >Complete</Button>
+          <Button
+            onClick={() => deleteTask(task, taskId)}
+            bsStyle="danger"
+          >Delete</Button>
+        </ButtonGroup>}
+      </Panel>
     )
   }
 }

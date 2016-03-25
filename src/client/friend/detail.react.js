@@ -1,16 +1,15 @@
 import React from 'react'
 import {Component} from 'vlux'
-import {Row, Col, Grid, Image, Modal, Button, Input, ButtonToolbar} from 'react-bootstrap'
+import {Row, Col, Grid} from 'react-bootstrap'
 import {requireLoad} from '../helpers/require_load.react'
 import {requirePermission} from '../helpers/require_permission.react'
 import {requireAuth} from '../auth/require_registration_state.react'
-import {isLoaded, getName} from '../user/helpers'
-import {Loading} from '../helpers/loading.react'
-import {gravatarSrc} from '../helpers/gravatar'
 import {actions as actionNames} from './actions'
 import {OpenTasks} from '../task/task_widget.react'
 import {getFriendTasks} from '../task/helpers'
 import {ListenFriendTasks} from '../task/listen_tasks.react'
+import {TaskModal} from '../task/task_modal.react'
+import {UserProfile} from '../user/profile_widget.react'
 
 function hasFriend(props) {
   return props.friends.get('friendIds').contains(props.params.id)
@@ -30,25 +29,6 @@ export class FriendDetail extends Component {
     firebase: React.PropTypes.object.isRequired,
   };
 
-  renderFriendDetails(friend) {
-    const {profile: {email, gravatarHash}} = friend
-    return (
-      <div>
-        <Row>
-          <Col md={12}>
-            <Image src={gravatarSrc({hash: gravatarHash, size: '400x400'})} rounded responsive />
-          </Col>
-        </Row>
-        <Row>
-          <Col md={12}>
-            <h2>{getName(friend)}</h2> <br />
-            {email}
-          </Col>
-        </Row>
-      </div>
-    )
-  }
-
   render() {
 
     const friendId = this.props.params.id
@@ -57,8 +37,6 @@ export class FriendDetail extends Component {
     const {auth: {uid}} = this.props
 
     const friend = users.get(friendId)
-
-    const isReady = isLoaded(friend)
 
     const taskActions = {
       editTask,
@@ -74,12 +52,13 @@ export class FriendDetail extends Component {
         <Row>
           <Col md={3}>
             <h1>User Profile</h1>
-            <Loading isReady={isReady}>
-              {isReady && this.renderFriendDetails(friend)}
-            </Loading>
+            <UserProfile user={friend} />
           </Col>
           <Col md={9}>
-            {task && <TaskModal {...{dispatch, task, submitTask}} />}
+            {task && <TaskModal {...{task, submitTask}}
+              hide={() => dispatch(actionNames.editTask, null)}
+              setTaskData={(keyPath, data) => dispatch(actionNames.setEditedTaskData, [keyPath, data])}
+            />}
             <h1>Tasks assigned by you</h1>
             {tasksReady && <OpenTasks
               tasks={getFriendTasks(tasks, friendId)}
@@ -88,57 +67,6 @@ export class FriendDetail extends Component {
           </Col>
         </Row>
       </Grid>
-    )
-  }
-}
-
-class TaskModal extends Component {
-
-  static propTypes = {
-    task: React.PropTypes.object.isRequired,
-    dispatch: React.PropTypes.func.isRequired,
-    submitTask: React.PropTypes.func.isRequired
-  }
-
-  render() {
-    const {task, task: {header, content}, dispatch, submitTask} = this.props
-    return (
-      <Modal show={true} onHide={() => dispatch(actionNames.editTask, null)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Task</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Input
-            type="text"
-            onChange={(e) => dispatch(actionNames.setEditedTaskData, [['header'], e.target.value])}
-            placeholder={'Enter short task title'}
-            value={header}
-          />
-          <Input
-            type="textarea"
-            onChange={(e) => dispatch(actionNames.setEditedTaskData, [['content'], e.target.value])}
-            placeholder={'Enter task description'}
-            value={content}
-          />
-          <ButtonToolbar>
-            <Button
-              onClick={() => {
-                submitTask(task)
-                dispatch(actionNames.editTask, null)
-              }}
-              bsStyle="success"
-            >
-              Submit
-            </Button>
-            <Button
-              onClick={() => dispatch(actionNames.editTask, null)}
-              bsStyle="warning"
-            >
-              Cancel
-            </Button>
-          </ButtonToolbar>
-        </Modal.Body>
-      </Modal>
     )
   }
 }
