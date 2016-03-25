@@ -43,11 +43,11 @@ export class Task extends Component {
           <Button
             onClick={() => completeTask(task, taskId)}
             bsStyle="success"
-          >Complete</Button>
+          >Done</Button>
           <Button
             onClick={() => deleteTask(task, taskId)}
             bsStyle="danger"
-          >Delete</Button>
+          >Won't Do</Button>
         </ButtonGroup>}
       </Panel>
     )

@@ -1,13 +1,22 @@
+import {fromJS} from 'immutable'
 import {createActions} from '../vlux'
+import {initialTaskState} from '../task/helpers'
 
 export const actions = createActions('dashboard', [
-  'test'
+  'editTask',
+  'setEditedTaskData',
 ])
 
-export function create(dispatch, router, getState) {
+export function create(dispatch, router, firebase, getState) {
   return {
-    test(res) {
-      dispatch(actions.test, res)
+    addTask(fromUser, toUser) {
+      const id = firebase.push().key()
+      const task = initialTaskState.merge(fromJS({id, fromUser, toUser})).toJS()
+      dispatch(actions.editTask, task)
+    },
+
+    editTask(task, id) {
+      dispatch(actions.editTask, {...task.toJS(), id})
     }
   }
 }

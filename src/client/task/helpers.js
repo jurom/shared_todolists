@@ -23,6 +23,6 @@ export const initialTaskState = fromJS({
   status: 'open',
 })
 
-export function getFriendTasks(tasks, friendId) {
-  return tasks.get(friendId).flatten(true)
+export function getUserTasks(tasks, userId) {
+  return tasks.get(userId, fromJS({})).flatten(true)
 }

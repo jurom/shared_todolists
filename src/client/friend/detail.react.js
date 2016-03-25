@@ -6,7 +6,7 @@ import {requirePermission} from '../helpers/require_permission.react'
 import {requireAuth} from '../auth/require_registration_state.react'
 import {actions as actionNames} from './actions'
 import {OpenTasks} from '../task/task_widget.react'
-import {getFriendTasks} from '../task/helpers'
+import {getUserTasks} from '../task/helpers'
 import {ListenFriendTasks} from '../task/listen_tasks.react'
 import {TaskModal} from '../task/task_modal.react'
 import {UserProfile} from '../user/profile_widget.react'
@@ -61,7 +61,7 @@ export class FriendDetail extends Component {
             />}
             <h1>Tasks assigned by you</h1>
             {tasksReady && <OpenTasks
-              tasks={getFriendTasks(tasks, friendId)}
+              tasks={getUserTasks(tasks, friendId)}
               {...{users, taskActions}}
             />}
           </Col>

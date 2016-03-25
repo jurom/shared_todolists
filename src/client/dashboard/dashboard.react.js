@@ -42,8 +42,12 @@ export class Dashboard extends Component {
             {this.renderNav(fromJS([
               {
                 route: 'friend',
-                label: 'Friends'
+                label: 'Friends',
               },
+              {
+                route: 'mytasks',
+                label: 'My tasks',
+              }
             ]))}
           </Col>
           <Col md={10}>
