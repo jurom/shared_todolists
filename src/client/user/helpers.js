@@ -1,5 +1,5 @@
 import {fromJS} from 'immutable'
-import {getFriendIdsToListen} from '../friends/helpers'
+import {getFriendIdsToListen} from '../friend/helpers'
 
 export function isLoaded(user) {
   if (user == null) return false

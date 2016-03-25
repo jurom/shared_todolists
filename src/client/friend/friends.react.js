@@ -17,7 +17,7 @@ export class Friends extends Component {
 
   renderNav(items) {
     const router = this.context.router
-    const absRoute = (route) => `/dashboard/friends/${route}`
+    const absRoute = (route) => `/dashboard/friend/${route}`
     const selectedKey = items
       .map(({route}) => absRoute(route))
       .filter((route) => router.isActive(route))

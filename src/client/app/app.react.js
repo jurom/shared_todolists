@@ -10,7 +10,7 @@ import {Settings} from '../settings/settings.react'
 import {read} from '../../common/firebase_actions'
 import {getUserIdsToListen} from '../user/helpers'
 import {getClient} from '../../firebase-transactions/src/client'
-import {ListenFriends} from '../friends/listen_friends.react'
+import {ListenFriends} from '../friend/listen_friends.react'
 
 export class App extends React.Component {
 

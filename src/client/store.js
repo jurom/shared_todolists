@@ -2,7 +2,7 @@ import dashboard from './dashboard/store'
 import auth from './auth/store'
 import users from './user/store'
 import settings from './settings/store'
-import friends from './friends/store'
+import friends from './friend/store'
 
 import {fromJS} from 'immutable'
 
