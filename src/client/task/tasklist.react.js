@@ -1,7 +1,7 @@
 import React from 'react'
 import {Component} from 'vlux'
 import {Accordion, Panel, Well, ButtonGroup, Button, Badge} from 'react-bootstrap'
-import {isCompleted, isDeleted, taskStyle} from './helpers'
+import {isDone, isDeleted, taskStyle} from './helpers'
 import {isLoaded, getName} from '../user/helpers'
 
 export class Task extends Component {
@@ -9,16 +9,15 @@ export class Task extends Component {
   static propTypes = {
     task: React.PropTypes.object.isRequired,
     taskId: React.PropTypes.string.isRequired,
+    changeTaskStatus: React.PropTypes.func.isRequired,
     editTask: React.PropTypes.func.isRequired,
-    completeTask: React.PropTypes.func.isRequired,
-    deleteTask: React.PropTypes.func.isRequired,
     users: React.PropTypes.object.isRequired
   }
 
   render() {
-    const {task, taskId, users, editTask, completeTask, deleteTask} = this.props
+    const {task, taskId, users, editTask, changeTaskStatus} = this.props
     const {fromUser, header, content, id} = task
-    const isTaskEditable = !isCompleted(task) && !isDeleted(task)
+    const isTaskEditable = !isDone(task) && !isDeleted(task)
 
     const taskAuthor = users.get(fromUser)
 
@@ -41,11 +40,11 @@ export class Task extends Component {
             bsStyle="warning"
           >Edit</Button>
           <Button
-            onClick={() => completeTask(task, taskId)}
+            onClick={() => changeTaskStatus(task, taskId, 'done')}
             bsStyle="success"
           >Done</Button>
           <Button
-            onClick={() => deleteTask(task, taskId)}
+            onClick={() => changeTaskStatus(task, taskId, 'wontdo')}
             bsStyle="danger"
           >Won't Do</Button>
         </ButtonGroup>}

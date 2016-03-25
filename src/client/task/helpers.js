@@ -1,15 +1,15 @@
 import {fromJS} from 'immutable'
 
-export function isCompleted(task) {
-  return task.get('status') === 'completed'
+export function isDone(task) {
+  return task.get('status') === 'done'
 }
 
 export function isDeleted(task) {
-  return task.get('status') === 'deleted'
+  return task.get('status') === 'wontdo'
 }
 
 export function taskStyle(task) {
-  return isCompleted(task) ?
+  return isDone(task) ?
       'success'
     :
       isDeleted(task) ? 'danger' : 'primary'

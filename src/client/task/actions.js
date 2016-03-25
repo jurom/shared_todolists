@@ -10,19 +10,14 @@ export const actions = createActions('task', [
 export function create(dispatch, router, firebase, getState, submitTransaction) {
   return {
 
-    deleteTask(task, id) {
-      const {fromUser, toUser} = task
-      return set(firebase.child(`task/${toUser}/${fromUser}/${id}/status`), 'deleted')
-    },
-
-    completeTask(task, id) {
-      const {fromUser, toUser} = task
-      return set(firebase.child(`task/${toUser}/${fromUser}/${id}/status`), 'completed')
-    },
-
     submitTask(task) {
       const {fromUser, toUser, id} = task
       return update(firebase.child(`task/${toUser}/${fromUser}/${id}`), task.toJS())
+    },
+
+    changeTaskStatus(task, id, status) {
+      const {fromUser, toUser} = task
+      return set(firebase.child(`task/${toUser}/${fromUser}/${id}/status`), status)
     }
   }
 }
