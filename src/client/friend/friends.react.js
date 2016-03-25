@@ -3,12 +3,16 @@ import {Component} from 'vlux'
 import {Nav, NavItem, Row, Col} from 'react-bootstrap'
 import {fromJS} from 'immutable'
 import {requireAuth} from '../auth/require_registration_state.react'
+import {requireLoad} from '../helpers/require_load.react'
+
 
 @requireAuth
+@requireLoad((props) => props.friends.get('friendIds') != null)
 export class Friends extends Component {
 
   static propTypes = {
     children: React.PropTypes.element.isRequired,
+    friends: React.PropTypes.object.isRequired,
   }
 
   static contextTypes = {

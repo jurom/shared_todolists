@@ -12,13 +12,17 @@ export class Friend extends Component {
     actions: React.PropTypes.object.isRequired,
   }
 
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired,
+  }
+
   renderCustomComponent() {
     const {user, friends, actions} = this.props
     if (isFriend(user, friends)) {
       return (
         <Button
           bsStyle="primary"
-          onClick={() => {}}
+          onClick={() => this.context.router.push(`/detail/${user.get('id')}`)}
         >View profile</Button>
       )
     } else if (wasRequestedBy(user, friends)) {
@@ -58,7 +62,7 @@ export class Friend extends Component {
   render() {
     const {user: {profile: {firstName, lastName, gravatarHash, email}}} = this.props
     return (
-      <Thumbnail src={gravatarSrc({hash: gravatarHash})} alt="">
+      <Thumbnail src={gravatarSrc({hash: gravatarHash, size: '400x400'})} alt="">
         <h3>{firstName}<br />{lastName}</h3>
         <small>{email}</small>
         {this.renderCustomComponent()}

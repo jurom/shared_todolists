@@ -3,7 +3,10 @@ import {Component} from 'vlux'
 import {isLoaded} from '../user/helpers'
 import {Row, Col} from 'react-bootstrap'
 import {Friend} from './friend.react'
+import {requireLoad} from '../helpers/require_load.react'
 
+
+@requireLoad((props) => props.friends.getIn(['requests', 'received']) != null)
 export class Requests extends Component {
 
   static propTypes = {

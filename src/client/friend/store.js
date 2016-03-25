@@ -5,15 +5,15 @@ const initialState = fromJS({
   search: {
     search: '',
     friendIds: {
-      email: new OrderedSet(),
-      firstLast: new OrderedSet(),
-      lastFirst: new OrderedSet(),
+      email: null,
+      firstLast: null,
+      lastFirst: null,
     },
   },
-  friendIds: new OrderedSet(),
+  friendIds: null,
   requests: {
-    sent: {},
-    received: {},
+    sent: null,
+    received: null,
   },
 })
 

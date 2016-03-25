@@ -1,12 +1,14 @@
+import {OrderedSet, fromJS} from 'immutable'
+
 export function getSearchedFriendsIds(friends) {
   return friends.getIn(['search', 'friendIds'])
-    .reduce((total, ids) => total.union(ids))
+    .reduce((total, ids) => total.union(ids || (new OrderedSet())), new OrderedSet())
 }
 
 export function getFriendIdsToListen(friends) {
   return getSearchedFriendsIds(friends)
-    .union(friends.get('friendIds'))
-    .union(friends.getIn(['requests', 'received']).keySeq())
+    .union(friends.get('friendIds') || (new OrderedSet()))
+    .union((friends.getIn(['requests', 'received']) ||  fromJS({})).keySeq())
 }
 
 export function isFriend(user, friends) {

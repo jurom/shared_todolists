@@ -7,6 +7,7 @@ import {FindFriends} from './friend/find.react'
 import {FriendList} from './friend/list.react'
 import {Friends} from './friend/friends.react'
 import {Requests} from './friend/requests.react'
+import {FriendDetail} from './friend/detail.react'
 import {redirect} from './helpers/redirect.react'
 import React from 'react'
 
@@ -22,6 +23,7 @@ export default  (
         <Route component={FriendList} path="list" />
       </Route>
     </Route>
+    <Route component={FriendDetail} path="/detail/:id" />
     <Route component={Login} path="/login" />
     <Route component={Signup} path="/signup" />
   </Route>
