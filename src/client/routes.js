@@ -1,5 +1,6 @@
 import {App} from './app/app.react'
 import {Dashboard} from './dashboard/dashboard.react'
+import {MyTasks} from './dashboard/mytasks.react'
 import {Login} from './auth/login.react'
 import {Signup} from './auth/signup.react'
 import {Route, IndexRoute} from 'react-router'
@@ -16,6 +17,7 @@ export default  (
     <IndexRoute component={redirect('/dashboard')} />
     <Route component={Dashboard} path="/dashboard">
       <IndexRoute component={redirect('/dashboard/friend')} />
+      <Route component={MyTasks} path="mytasks" />
       <Route component={Friends} path="friend">
         <IndexRoute component={redirect('/dashboard/friend/list')} />
         <Route component={Requests} path="requests" />

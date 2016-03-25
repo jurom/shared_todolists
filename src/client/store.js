@@ -3,6 +3,7 @@ import auth from './auth/store'
 import users from './user/store'
 import settings from './settings/store'
 import friends from './friend/store'
+import tasks from './task/store'
 
 import {fromJS} from 'immutable'
 
@@ -23,5 +24,6 @@ export default function store(state = initialState, action, payload) {
   state = state.update('users', (s) => users(s, action, payload))
   state = state.update('settings', (s) => settings(s, action, payload))
   state = state.update('friends', (s) => friends(s, action, payload))
+  state = state.update('tasks', (s) => tasks(s, action, payload))
   return state
 }
