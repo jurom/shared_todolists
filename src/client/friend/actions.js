@@ -1,10 +1,14 @@
 import {createActions} from '../vlux'
+import {initialTaskState} from '../task/helpers'
+import {fromJS} from 'immutable'
 
 export const actions = createActions('friends', [
   'search',
   'onSearchedFriendIds',
   'onFriendIds',
   'onFriendRequests',
+  'editTask',
+  'setEditedTaskData',
 ])
 
 export function create(dispatch, router, firebase, getState, submitTransaction) {
@@ -40,6 +44,16 @@ export function create(dispatch, router, firebase, getState, submitTransaction) 
         uid,
         requestingUserId: user.get('id')
       })
+    },
+
+    addTask(fromUser, toUser) {
+      const id = firebase.push().key()
+      const task = initialTaskState.merge(fromJS({id, fromUser, toUser})).toJS()
+      dispatch(actions.editTask, task)
+    },
+
+    editTask(task, id) {
+      dispatch(actions.editTask, {...task.toJS(), id})
     }
 
   }

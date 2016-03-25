@@ -15,6 +15,9 @@ const initialState = fromJS({
     sent: null,
     received: null,
   },
+  task: {
+    editedTask: null,
+  }
 })
 
 export default function store(state = initialState, action, payload) {
@@ -30,6 +33,12 @@ export default function store(state = initialState, action, payload) {
     },
     [actions.onFriendRequests]: ([key, requests]) => {
       return state.setIn(['requests', key], fromJS(requests))
+    },
+    [actions.editTask]: (task) => {
+      return state.setIn(['task', 'editedTask'], fromJS(task))
+    },
+    [actions.setEditedTaskData]: ([keyPath, value]) => {
+      return state.setIn(['task', 'editedTask', ...keyPath], value)
     }
   }[action] || (() => state))(payload)
 }
