@@ -1,8 +1,33 @@
 import React from 'react'
 import {Component} from 'vlux'
+import {fromJS} from 'immutable'
 import {Accordion, Panel, Well, ButtonGroup, Button, Badge} from 'react-bootstrap'
-import {isDone, isDeleted, taskStyle} from './helpers'
+import {taskStyle, isEditable} from './helpers'
 import {isLoaded, getName} from '../user/helpers'
+
+const taskActions = fromJS({
+  open: {
+    label: 'Open',
+    nextStatus: 'open',
+    bsStyle: 'primary',
+  },
+  wontdo: {
+    label: 'Won\'t do',
+    nextStatus: 'wontdo',
+    bsStyle: 'danger',
+  },
+  complete: {
+    label: 'Done',
+    nextStatus: 'done',
+    bsStyle: 'success',
+  },
+})
+
+const taskStateTransitions = fromJS({
+  open: ['wontdo', 'complete'],
+  wontdo: ['open'],
+  done: ['open']
+})
 
 export class Task extends Component {
 
@@ -14,10 +39,34 @@ export class Task extends Component {
     users: React.PropTypes.object.isRequired
   }
 
+  renderTaskActions(task, taskId, editTask, changeTaskStatus) {
+    const {status} = task
+    return (
+      <ButtonGroup>
+        {isEditable(task) && <Button
+          bsStyle="warning"
+          onClick={() => editTask(task, taskId)}
+        >
+          Edit
+        </Button>}
+        {taskStateTransitions.get(status)
+          .map((action) => taskActions.get(action))
+          .map(({label, nextStatus, bsStyle}) =>
+          <Button
+            key={nextStatus}
+            bsStyle={bsStyle}
+            onClick={() => changeTaskStatus(task, taskId, nextStatus)}
+          >
+            {label}
+          </Button>
+        )}
+      </ButtonGroup>
+    )
+  }
+
   render() {
     const {task, taskId, users, editTask, changeTaskStatus} = this.props
     const {fromUser, header, content, id} = task
-    const isTaskEditable = !isDone(task) && !isDeleted(task)
 
     const taskAuthor = users.get(fromUser)
 
@@ -34,20 +83,7 @@ export class Task extends Component {
     return isReady && (
       <Panel collapsible eventKey={id} header={getHeader()} bsStyle={taskStyle(task)} >
         <Well>{content || 'No description.'}</Well>
-        {isTaskEditable && <ButtonGroup>
-          <Button
-            onClick={() => editTask(task, taskId)}
-            bsStyle="warning"
-          >Edit</Button>
-          <Button
-            onClick={() => changeTaskStatus(task, taskId, 'done')}
-            bsStyle="success"
-          >Done</Button>
-          <Button
-            onClick={() => changeTaskStatus(task, taskId, 'wontdo')}
-            bsStyle="danger"
-          >Won't Do</Button>
-        </ButtonGroup>}
+        {this.renderTaskActions(task, taskId, editTask, changeTaskStatus)}
       </Panel>
     )
   }

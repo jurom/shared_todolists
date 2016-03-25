@@ -15,6 +15,10 @@ export function taskStyle(task) {
       isDeleted(task) ? 'danger' : 'primary'
 }
 
+export function isEditable(task) {
+  return !isDone(task) && !isDeleted(task)
+}
+
 export const initialTaskState = fromJS({
   header: '',
   content: '',
