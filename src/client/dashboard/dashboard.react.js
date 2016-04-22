@@ -1,8 +1,9 @@
 import React from 'react'
 import {Component} from 'vlux'
 import {requireAuth} from '../auth/require_registration_state.react'
-import {Grid, Nav, NavItem, Row, Col} from 'react-bootstrap'
+import {Grid, Row, Col} from 'react-bootstrap'
 import {fromJS} from 'immutable'
+import {renderNav} from '../helpers/navigation.react'
 
 @requireAuth
 export class Dashboard extends Component {
@@ -17,38 +18,29 @@ export class Dashboard extends Component {
     router: React.PropTypes.object.isRequired,
   }
 
-  renderNav(items) {
-    const router = this.context.router
-    const absRoute = (route) => `/dashboard/${route}`
-    const selectedKey = items
-      .map(({route}) => absRoute(route))
-      .filter((route) => router.isActive(route))
-      .first()
-    return (
-      <Nav bsStyle="pills" stacked onSelect={(route) => router.push(route)} activeKey={selectedKey}>
-        {items.map(({route, label}) =>
-          <NavItem eventKey={absRoute(route)} key={route} >{label}</NavItem>
-        )}
-      </Nav>
-    )
-  }
-
   render() {
     const {children, ...propsNoChildren} = this.props
     return (
       <Grid>
         <Row>
           <Col md={2}>
-            {this.renderNav(fromJS([
-              {
-                route: 'friend',
-                label: 'Friends',
-              },
-              {
-                route: 'mytasks',
-                label: 'My tasks',
+            {renderNav(this.context.router, {
+              baseRoute: '/dashboard',
+              items: fromJS([
+                {
+                  route: 'friend',
+                  label: 'Friends',
+                },
+                {
+                  route: 'mytasks',
+                  label: 'My tasks',
+                }
+              ]),
+              navProps: {
+                bsStyle: 'pills',
+                stacked: true,
               }
-            ]))}
+            })}
           </Col>
           <Col md={10}>
             {React.cloneElement(this.props.children, propsNoChildren)}

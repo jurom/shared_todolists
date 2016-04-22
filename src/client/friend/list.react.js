@@ -21,8 +21,8 @@ export class FriendList extends Component {
 
     return (
       <Row>
-        {usersToShow.map((user) =>
-          <Col md={3}>
+        {usersToShow.map((user, id) =>
+          <Col md={3} key={id}>
             <Friend {...{user, actions, friends}} />
           </Col>)}
       </Row>
