@@ -2,7 +2,7 @@ import React from 'react'
 import {Component} from 'vlux'
 import {UserProfile} from '../user/profile_widget.react'
 import {Row, Col} from 'react-bootstrap'
-import {OpenTasks} from '../task/task_widget.react'
+import {TaskWidget} from '../task/task_widget.react'
 import {TaskModal} from '../task/task_modal.react'
 import {getUserTasks} from '../task/helpers'
 import {ListenMyTasks} from '../task/listen_tasks.react'
@@ -25,7 +25,8 @@ export class MyTasks extends Component {
 
   render() {
 
-    const {users, user, tasks, auth: {uid}, dashboard: {myTasks: {editedTask: task}}, dispatch} = this.props
+    const {users, user, tasks, auth: {uid},
+      dashboard: {myTasks: {editedTask: task, filter}}, dispatch} = this.props
     const {actions: {dashboard: {addTask, editTask}, tasks: {submitTask}}, firebase} = this.props
 
     const taskActions = {
@@ -47,9 +48,10 @@ export class MyTasks extends Component {
             hide={() => dispatch(actionNames.editTask, null)}
             setTaskData={(keyPath, data) => dispatch(actionNames.setEditedTaskData, [keyPath, data])}
           />}
-          <OpenTasks
+          <TaskWidget
             tasks={getUserTasks(tasks, uid)}
-            {...{users, taskActions}}
+            changeFilter={(filterName) => dispatch(actionNames.setTaskFilter, filterName)}
+            {...{users, taskActions, filter}}
           />
         </Col>
       </Row>

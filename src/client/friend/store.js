@@ -17,6 +17,7 @@ const initialState = fromJS({
   },
   task: {
     editedTask: null,
+    filter: 'open',
   }
 })
 
@@ -39,6 +40,9 @@ export default function store(state = initialState, action, payload) {
     },
     [actions.setEditedTaskData]: ([keyPath, value]) => {
       return state.setIn(['task', 'editedTask', ...keyPath], value)
-    }
+    },
+    [actions.setTaskFilter]: (filterName) => {
+      return state.setIn(['task', 'filter'], filterName)
+    },
   }[action] || (() => state))(payload)
 }

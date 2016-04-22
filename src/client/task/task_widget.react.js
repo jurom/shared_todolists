@@ -1,29 +1,53 @@
 import React from 'react'
 import {Component} from 'vlux'
-import {Panel, Button} from 'react-bootstrap'
+import {Button, Nav, NavItem} from 'react-bootstrap'
 import {TaskList} from './tasklist.react'
 import {requireLoad} from '../helpers/require_load.react'
+import {fromJS} from 'immutable'
+
+const taskToLabel = fromJS({
+  done: 'Done',
+  wontdo: 'Declined',
+  open: 'Open',
+})
 
 @requireLoad((props) => props.tasks != null)
-export class OpenTasks extends Component {
+export class TaskWidget extends Component {
 
   static propTypes = {
     tasks: React.PropTypes.object.isRequired,
     taskActions: React.PropTypes.object.isRequired,
+    filter: React.PropTypes.string.isRequired,
+    changeFilter: React.PropTypes.func.isRequired,
     users: React.PropTypes.object.isRequired
   }
 
+  renderTabs(filter, changeFilter) {
+    return (
+      <Nav bsStyle="tabs" onSelect={changeFilter} activeKey={filter}>
+        {taskToLabel.map((label, id) =>
+          <NavItem eventKey={id} key={id} >{label}</NavItem>
+        ).valueSeq()}
+      </Nav>
+    )
+  }
+
+  filterTasks(tasks, filter) {
+    return tasks.filter(({status}) => status === filter)
+  }
+
   render() {
-    const {tasks, taskActions, taskActions: {addTask}, users} = this.props
+    const {tasks, taskActions, taskActions: {addTask}, users, filter, changeFilter} = this.props
 
     return (
-      <Panel header="Open tasks" bsStyle="primary">
-        <TaskList {...{tasks, taskActions, users}} />
-        <Button
+      <div>
+        {this.renderTabs(filter, changeFilter)}
+        <TaskList {...{tasks: this.filterTasks(tasks, filter), taskActions, users}} />
+        {filter === 'open' && <Button
           onClick={addTask}
           bsStyle="primary"
-        >Add Task</Button>
-      </Panel>
+        >Add Task</Button>}
+      </div>
     )
   }
 }

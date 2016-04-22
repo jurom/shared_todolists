@@ -5,7 +5,7 @@ import {requireLoad} from '../helpers/require_load.react'
 import {requirePermission} from '../helpers/require_permission.react'
 import {requireAuth} from '../auth/require_registration_state.react'
 import {actions as actionNames} from './actions'
-import {OpenTasks} from '../task/task_widget.react'
+import {TaskWidget} from '../task/task_widget.react'
 import {getUserTasks} from '../task/helpers'
 import {ListenFriendTasks} from '../task/listen_tasks.react'
 import {TaskModal} from '../task/task_modal.react'
@@ -32,7 +32,7 @@ export class FriendDetail extends Component {
   render() {
 
     const friendId = this.props.params.id
-    const {tasks, users, friends: {task: {editedTask: task}}, actions, dispatch, firebase} = this.props
+    const {tasks, users, friends: {task: {editedTask: task, filter}}, actions, dispatch, firebase} = this.props
     const {tasks: {submitTask}, friends: {editTask, addTask}} = actions
     const {auth: {uid}} = this.props
 
@@ -60,9 +60,10 @@ export class FriendDetail extends Component {
               setTaskData={(keyPath, data) => dispatch(actionNames.setEditedTaskData, [keyPath, data])}
             />}
             <h1>Tasks assigned by you</h1>
-            {tasksReady && <OpenTasks
+            {tasksReady && <TaskWidget
               tasks={getUserTasks(tasks, friendId)}
-              {...{users, taskActions}}
+              changeFilter={(filterName) => dispatch(actionNames.setTaskFilter, filterName)}
+              {...{users, taskActions, filter}}
             />}
           </Col>
         </Row>

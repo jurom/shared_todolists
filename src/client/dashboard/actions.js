@@ -5,6 +5,7 @@ import {initialTaskState} from '../task/helpers'
 export const actions = createActions('dashboard', [
   'editTask',
   'setEditedTaskData',
+  'setTaskFilter',
 ])
 
 export function create(dispatch, router, firebase, getState) {

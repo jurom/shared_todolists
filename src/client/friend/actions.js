@@ -9,6 +9,7 @@ export const actions = createActions('friends', [
   'onFriendRequests',
   'editTask',
   'setEditedTaskData',
+  'setTaskFilter',
 ])
 
 export function create(dispatch, router, firebase, getState, submitTransaction) {
