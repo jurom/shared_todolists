@@ -6,15 +6,25 @@ export default class Html extends Component {
   static propTypes = {
     appConfig: React.PropTypes.object.isRequired,
     bodyHtml: React.PropTypes.string.isRequired,
+    config: React.PropTypes.object.isRequired,
+    version: React.PropTypes.string.isRequired
   };
 
   render() {
-    const {bodyHtml, appConfig} = this.props
+    const {bodyHtml, appConfig, config, version} = this.props
+
+    // Only for production. For dev, it's handled by webpack with livereload.
+    const linkStyles = !config.useWebpackDevServer &&
+      <link
+        href={`/build/app.css?v=${version}`}
+        rel="stylesheet"
+      />
 
     return (
       <html lang="en">
         <head>
           <meta charSet="utf-8" />
+          {linkStyles}
           <script
             src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser-polyfill.min.js"
           />
