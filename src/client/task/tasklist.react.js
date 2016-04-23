@@ -66,7 +66,7 @@ export class Task extends Component {
 
   renderContent(content) {
     return (
-      <Well>
+      <Well bsSize="small">
         {content ?
           fromJS(content.split('\n')).reduce((x, y) => x.push(<span>{y}</span>, <br />), fromJS([]))
         :

@@ -119,7 +119,7 @@ export class ChatWidget extends Component {
           friendId: friend.get('id'),
           messageActions,
         }} />
-        <div className="panel panel-default">
+        <div className="panel panel-default chat-widget">
           <div className="panel-heading">
             {this.renderHeader()}
           </div>

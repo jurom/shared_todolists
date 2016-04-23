@@ -5,7 +5,6 @@ import {listenFirebase} from '../helpers/listen_firebase.react'
 export const ListenNewMessages = listenFirebase(
   (props) => props.firebase.child(`message/${props.fromId}/${props.toId}`),
   (e, props, data) => {
-    console.log('change on ' + props.fromId)
     props.onNewMessage({
       fromId: props.fromId,
       toId: props.toId,
