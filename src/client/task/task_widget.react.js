@@ -6,9 +6,10 @@ import {requireLoad} from '../helpers/require_load.react'
 import {fromJS} from 'immutable'
 
 const taskToLabel = fromJS({
+  all: 'All',
+  open: 'Open',
   done: 'Done',
   wontdo: 'Declined',
-  open: 'Open',
 })
 
 @requireLoad((props) => props.tasks != null)
@@ -33,7 +34,7 @@ export class TaskWidget extends Component {
   }
 
   filterTasks(tasks, filter) {
-    return tasks.filter(({status}) => status === filter)
+    return tasks.filter(({status}) => (filter === 'all') || (status === filter))
   }
 
   render() {
