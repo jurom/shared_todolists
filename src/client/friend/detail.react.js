@@ -10,6 +10,7 @@ import {getUserTasks} from '../task/helpers'
 import {ListenFriendTasks} from '../task/listen_tasks.react'
 import {TaskModal} from '../task/task_modal.react'
 import {UserProfile} from '../user/profile_widget.react'
+import {ChatWidget} from '../message/chat_widget.react'
 
 function hasFriend(props) {
   return props.friends.get('friendIds').contains(props.params.id)
@@ -27,13 +28,16 @@ export class FriendDetail extends Component {
     dispatch: React.PropTypes.func.isRequired,
     tasks: React.PropTypes.object.isRequired,
     firebase: React.PropTypes.object.isRequired,
+    user: React.PropTypes.object.isRequired,
+    messages: React.PropTypes.object.isRequired,
   };
 
   render() {
 
     const friendId = this.props.params.id
     const {tasks, users, friends: {task: {editedTask: task, filter}}, actions, dispatch, firebase} = this.props
-    const {tasks: {submitTask}, friends: {editTask, addTask}} = actions
+    const {tasks: {submitTask}, friends: {editTask, addTask}, messages: messageActions} = actions
+    const {user, messages: {[friendId]: conversation}} = this.props
     const {auth: {uid}} = this.props
 
     const friend = users.get(friendId)
@@ -54,7 +58,7 @@ export class FriendDetail extends Component {
             <h1>User Profile</h1>
             <UserProfile user={friend} />
           </Col>
-          <Col md={9}>
+          <Col md={5}>
             {task && <TaskModal {...{task, submitTask}}
               hide={() => dispatch(actionNames.editTask, null)}
               setTaskData={(keyPath, data) => dispatch(actionNames.setEditedTaskData, [keyPath, data])}
@@ -65,6 +69,9 @@ export class FriendDetail extends Component {
               changeFilter={(filterName) => dispatch(actionNames.setTaskFilter, filterName)}
               {...{users, taskActions, filter}}
             />}
+          </Col>
+          <Col md={4}>
+            <ChatWidget {...{user, friend, messageActions, firebase, conversation}} />
           </Col>
         </Row>
       </Grid>

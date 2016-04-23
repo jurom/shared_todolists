@@ -47,6 +47,8 @@ function getPageHtml({hostname, appConfig}) {
   return '<!DOCTYPE html>' + ReactDOMServer.renderToStaticMarkup(
     <Html
       bodyHtml={appHtml + scriptHtml}
+      config={config}
+      version={config.version}
       appConfig={appConfig}
     />
   )

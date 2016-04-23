@@ -1,3 +1,4 @@
+import '../../../assets/stylesheets/_share_todo.scss'
 import React from 'react'
 import {create} from '../actions'
 import {dispatcher, dispatch} from '../dispatcher'
