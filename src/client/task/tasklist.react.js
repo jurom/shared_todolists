@@ -64,6 +64,17 @@ export class Task extends Component {
     )
   }
 
+  renderContent(content) {
+    return (
+      <Well>
+        {content ?
+          fromJS(content.split('\n')).reduce((x, y) => x.push(<span>{y}</span>, <br />), fromJS([]))
+        :
+          'No description.'
+        }
+      </Well>)
+  }
+
   render() {
     const {task, taskId, users, editTask, changeTaskStatus} = this.props
     const {fromUser, header, content, id} = task
@@ -82,7 +93,7 @@ export class Task extends Component {
 
     return isReady && (
       <Panel collapsible eventKey={id} header={getHeader()} bsStyle={taskStyle(task)} >
-        <Well>{content || 'No description.'}</Well>
+        {this.renderContent(content)}
         {this.renderTaskActions(task, taskId, editTask, changeTaskStatus)}
       </Panel>
     )
