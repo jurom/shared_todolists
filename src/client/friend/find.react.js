@@ -1,6 +1,6 @@
 import React from 'react'
 import {Component} from 'vlux'
-import {Row, Col, Input} from 'react-bootstrap'
+import {Row, Col, FormControl, FormGroup, ControlLabel} from 'react-bootstrap'
 import {actions as actionNames} from './actions'
 import {ListenFriends} from './listen_search.react'
 import {getSearchedFriendsIds} from './helpers'
@@ -35,12 +35,14 @@ export class FindFriends extends Component {
         <ListenFriends {...{search, dispatch, firebase}} />
         <Row>
           <Col md={6} >
-            <Input
-              type="text"
-              onChange={(e) => dispatch(actionNames.search, e.target.value)}
-              value={search}
-              placeholder={'Search for user'}
-            />
+            <FormGroup controlId="searchFriends">
+              <FormControl
+                type="text"
+                onChange={(e) => dispatch(actionNames.search, e.target.value)}
+                value={search}
+                placeholder={'Enter friend\'s name'}
+              />
+            </FormGroup>
           </Col>
         </Row>
         <Row>

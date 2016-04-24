@@ -1,9 +1,15 @@
 import React from 'react'
 import {Component} from 'vlux'
-import {Modal, Input, Row, Col, Grid, Button} from 'react-bootstrap'
+import {fromJS} from 'immutable'
+import {Modal, Row, Col, Grid, Button, FormGroup, FormControl, ControlLabel} from 'react-bootstrap'
 import {actions as actionNames} from './actions'
 import {requireLoad} from '../helpers/require_load.react'
 import {registrationStatus, REGISTERED} from '../auth/registration_status'
+
+const fieldToLabel = {
+  firstName: 'First name',
+  lastName: 'Last name',
+}
 
 @requireLoad(({users, auth}) => registrationStatus(users, auth) === REGISTERED)
 export class Settings extends Component {
@@ -19,13 +25,16 @@ export class Settings extends Component {
 
     const {settings: {show}, user, actions: {settings: actions}, dispatch} = this.props
 
-    const inputFor = (name) => {
+    const inputFor = (label, name) => {
       return (
-        <Input
-          type="text"
-          onChange={(e) => actions.updateProfile({[name]: e.target.value})}
-          value={user.getIn(['profile', name])}
-        />
+        <FormGroup key={name} controlId={name}>
+          <ControlLabel>{label}</ControlLabel>
+          <FormControl
+            type="text"
+            onChange={(e) => actions.updateProfile({[name]: e.target.value})}
+            value={user.getIn(['profile', name])}
+          />
+        </FormGroup>
       )
     }
     return (
@@ -38,8 +47,7 @@ export class Settings extends Component {
             <Row>
               <Col md={6}>
                 <h2>Profile</h2>
-                {inputFor('firstName')}
-                {inputFor('lastName')}
+                {fromJS(fieldToLabel).map(inputFor).valueSeq()}
               </Col>
               <Col md={6}>
                 <h2>Account</h2>
