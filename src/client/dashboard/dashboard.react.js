@@ -4,14 +4,18 @@ import {requireAuth} from '../auth/require_registration_state.react'
 import {Grid, Row, Col} from 'react-bootstrap'
 import {fromJS} from 'immutable'
 import {renderNav} from '../helpers/navigation.react'
+import {isLoaded} from '../user/helpers'
+import {requirePermission} from '../helpers/require_permission.react'
 
 @requireAuth
+@requirePermission((props) => isLoaded(props.user))
 export class Dashboard extends Component {
 
   static propTypes = {
     actions: React.PropTypes.object.isRequired,
     dashboard: React.PropTypes.object.isRequired,
     children: React.PropTypes.element.isRequired,
+    user: React.PropTypes.object.isRequired,
   }
 
   static contextTypes = {

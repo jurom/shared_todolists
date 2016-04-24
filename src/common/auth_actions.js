@@ -1,5 +1,6 @@
 import CryptoJS from 'crypto-js'
 import {set, read} from './firebase_actions'
+import Firebase from 'firebase'
 
 export function getProfileSearchIndices(profile) {
   const first = profile.firstName.toUpperCase()
@@ -30,7 +31,8 @@ export const storeUser = (firebase, {uid, email, profile}) => {
     set(firebase.child(`user/profile/${uid}`), {...profile, email, gravatarHash}),
     set(firebase.child(`user/role/${uid}`), {
       type: 'user',
-      blocked: false
+      blocked: false,
+      created: Firebase.ServerValue.TIMESTAMP
     })
   ])
   .then(() => updateSearchIndices(firebase, uid))

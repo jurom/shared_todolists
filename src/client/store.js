@@ -5,6 +5,7 @@ import settings from './settings/store'
 import friends from './friend/store'
 import tasks from './task/store'
 import messages from './message/store'
+import admin from './admin/store'
 
 import {fromJS} from 'immutable'
 
@@ -27,5 +28,6 @@ export default function store(state = initialState, action, payload) {
   state = state.update('friends', (s) => friends(s, action, payload))
   state = state.update('tasks', (s) => tasks(s, action, payload))
   state = state.update('messages', (s) => messages(s, action, payload))
+  state = state.update('admin', (s) => admin(s, action, payload))
   return state
 }

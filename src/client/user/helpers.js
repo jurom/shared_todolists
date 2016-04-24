@@ -6,6 +6,14 @@ export function isLoaded(user) {
   return fromJS(['role', 'profile']).every((key) => user.has(key))
 }
 
+export function isBlocked(user) {
+  return user.getIn(['role', 'blocked'])
+}
+
+export function isAdmin(user) {
+  return user.getIn(['role', 'type']) === 'admin'
+}
+
 export function getName(user) {
   const {profile: {firstName, lastName}} = user
   return `${firstName} ${lastName}`

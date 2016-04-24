@@ -10,6 +10,7 @@ import {Friends} from './friend/friends.react'
 import {Requests} from './friend/requests.react'
 import {FriendDetail} from './friend/detail.react'
 import {redirect} from './helpers/redirect.react'
+import {Admin} from './admin/admin.react'
 import React from 'react'
 
 export default  (
@@ -28,5 +29,6 @@ export default  (
     <Route component={FriendDetail} path="/detail/:id" />
     <Route component={Login} path="/login" />
     <Route component={Signup} path="/signup" />
+    <Route component={Admin} path="/admin" />
   </Route>
 )
