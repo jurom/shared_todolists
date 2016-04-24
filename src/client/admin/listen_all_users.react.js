@@ -4,12 +4,13 @@ import {listenFirebase} from '../helpers/listen_firebase.react'
 import {ListenUsers} from '../user/listen_user.react'
 import {actions} from './actions'
 import {getActiveIds} from './helpers'
+import {fromJS} from 'immutable'
 
 const ListenUserIds = listenFirebase(
-  (props) => props.firebase.child(`user/role`).orderByChild('created'),
+  (props) => props.firebase.child(`user/role`),
   (e, props, data) => {
     if (data.val() == null) return []
-    return props.onIds(Object.keys(data.val()))
+    return props.onIds(fromJS(data.val()).sortBy(({created}) => created).keySeq().toJS())
   }
 )
 

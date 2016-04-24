@@ -3,6 +3,7 @@ import {Component} from 'vlux'
 import {registrationStatus, UNREGISTERED} from '../auth/registration_status'
 import {Navbar, NavItem, Nav, NavDropdown, MenuItem} from 'react-bootstrap'
 import {actions as settingsActions} from '../settings/actions'
+import {isAdmin} from '../user/helpers'
 
 export class Header extends Component {
 
@@ -41,6 +42,8 @@ export class Header extends Component {
     return (
       <Nav pullRight>
         <NavDropdown id="profile-dropdown" title={email}>
+          {isAdmin(this.props.user) &&
+            <MenuItem onClick={(e) => this.props.actions.auth.redirectTo('/admin')}>Admin</MenuItem>}
           <MenuItem onClick={(e) => dispatch(settingsActions.toggleShow, true)} >Settings</MenuItem>
           <MenuItem onClick={(e) => this.props.actions.auth.logout()} >Logout</MenuItem>
         </NavDropdown>
