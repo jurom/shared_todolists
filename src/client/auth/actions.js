@@ -12,6 +12,22 @@ export function create(dispatch, router, firebase, getState) {
 
   const redirectTo = (route) => router.push(route)
 
+  const handleAuth = (data) => {
+    const oldUid = getState().getIn(['auth', 'uid'])
+    const uid = data ? data.uid : null
+
+    // Nothing changed
+    if (oldUid === uid) return
+
+    if (uid == null) {
+      // User is logged out
+      dispatch('clearState', [])
+    } else {
+      // User is logged in
+      dispatch(actions.authUid, uid)
+    }
+  }
+
   return {
 
     signup({email, password, firstName, lastName}) {
@@ -49,24 +65,20 @@ export function create(dispatch, router, firebase, getState) {
 
     redirectTo,
 
-    handleAuth(data) {
-      const oldUid = getState().getIn(['auth', 'uid'])
-      const uid = data ? data.uid : null
-
-      // Nothing changed
-      if (oldUid === uid) return
-
-      if (uid == null) {
-        // User is logged out
-        dispatch('clearState', [])
-      } else {
-        // User is logged in
-        dispatch(actions.authUid, uid)
-      }
-    },
+    handleAuth,
 
     logout() {
-      firebase.unauth()
+
+      const uid = getState().getIn(['auth', 'uid'])
+      const firebaseUid = firebase.getAuth().uid
+
+      if (uid !== firebaseUid) {
+        // Auth with different uid => probably admin
+        handleAuth({uid: firebaseUid})
+        router.push('/admin')
+      } else {
+        firebase.unauth()
+      }
     },
   }
 
