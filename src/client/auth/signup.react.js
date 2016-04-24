@@ -1,10 +1,11 @@
 import {Component} from 'vlux'
 import React from 'react'
-import {Grid, Row, Col, Button, Input} from 'react-bootstrap'
+import {Grid, Row, Col, Button} from 'react-bootstrap'
 import {actions as actionNames} from './actions'
 import {requireUnauth} from './require_registration_state.react'
 import {Validate, IsRequired, IsEmail, HasLength} from 'react-custom-validation'
-import {validityProps, nameToPlaceholder, formValid} from './helpers'
+import {formValid} from './helpers'
+import {createInputsFor} from './field_helpers.react'
 
 @requireUnauth
 export class Signup extends Component {
@@ -24,20 +25,14 @@ export class Signup extends Component {
 
   render() {
 
-    const {dispatch, auth: {signup: {fields, validation}}} = this.props
+    const {dispatch, auth: {signup, signup: {fields, validation}}} = this.props
 
-    const onValidation = (name) => (validity) => {
-      dispatch(actionNames.validation, [['signup', 'validation', name], validity])
-    }
-
-    const validityForInput = validityProps(validation)
-
-    const propsForInput = (name) => ({
-      onChange: (e) => dispatch(actionNames.set, [['signup', 'fields', name], e.target.value]),
-      value: fields.get(name),
-      placeholder: nameToPlaceholder[name],
-      ...validityForInput(name)
-    })
+    const {renderInput, onValidation} = createInputsFor(
+      'signup',
+      (v) => dispatch(actionNames.validation, v),
+      (v) => dispatch(actionNames.set, v),
+      signup
+    )
 
     return (
       <Grid>
@@ -45,23 +40,27 @@ export class Signup extends Component {
           <Col mdOffset={3} md={6} >
             <form onSubmit={this.onSubmit}>
               <h1>Register</h1>
+              {renderInput('email')}
+              {renderInput('password', 'password')}
+              {renderInput('firstName')}
+              {renderInput('lastName')}
               <Validate onValidation={onValidation('email')}>
-                <Input type="text" {...propsForInput('email')} />
-                <IsRequired />
-                <IsEmail />
+                <IsRequired value={fields.get('email')} />
+                <IsEmail value={fields.get('email')} />
               </Validate>
               <Validate onValidation={onValidation('password')}>
-                <Input type="password" {...propsForInput('password')} />
-                <IsRequired />
-                <HasLength min={8} msg={'Password should be at least 8 characters long'} />
+                <IsRequired value={fields.get('password')} />
+                <HasLength
+                  min={8}
+                  value={fields.get('password')}
+                  msg={'Password should be at least 8 characters long'}
+                />
               </Validate>
               <Validate onValidation={onValidation('firstName')}>
-                <Input type="text" {...propsForInput('firstName')} />
-                <IsRequired />
+                <IsRequired value={fields.get('firstName')} />
               </Validate>
               <Validate onValidation={onValidation('lastName')}>
-                <Input type="text" {...propsForInput('lastName')} />
-                <IsRequired />
+                <IsRequired value={fields.get('lastName')} />
               </Validate>
               <Button
                 type="submit"

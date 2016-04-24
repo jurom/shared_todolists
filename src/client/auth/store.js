@@ -35,7 +35,7 @@ export default function store(state = initialState, action, payload) {
       return state.set('uid', uid)
     },
     [actions.validation]: ([keyPath, validity]) => {
-      return state.setIn(keyPath, fromJS(validity))
+      return state.mergeIn(keyPath, fromJS(validity))
     },
   }[action] || (() => state))(payload)
 }

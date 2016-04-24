@@ -1,6 +1,6 @@
 import React from 'react'
 import {Component} from 'vlux'
-import {Modal, Input, ButtonToolbar, Button} from 'react-bootstrap'
+import {Modal, FormGroup, FormControl, ButtonToolbar, Button} from 'react-bootstrap'
 
 export class TaskModal extends Component {
 
@@ -19,18 +19,23 @@ export class TaskModal extends Component {
           <Modal.Title>Task</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Input
-            type="text"
-            onChange={(e) => setTaskData(['header'], e.target.value)}
-            placeholder={'Enter short task title'}
-            value={header}
-          />
-          <Input
-            type="textarea"
-            onChange={(e) => setTaskData(['content'], e.target.value)}
-            placeholder={'Enter task description'}
-            value={content}
-          />
+          <FormGroup>
+            <FormControl
+              type="text"
+              onChange={(e) => setTaskData(['header'], e.target.value)}
+              placeholder={'Enter short task title'}
+              value={header}
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormControl
+              componentClass="textarea"
+              onChange={(e) => setTaskData(['content'], e.target.value)}
+              placeholder={'Enter task description'}
+              value={content}
+              rows={5}
+            />
+          </FormGroup>
           <ButtonToolbar>
             <Button
               onClick={() => {

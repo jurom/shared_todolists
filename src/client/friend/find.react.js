@@ -1,6 +1,6 @@
 import React from 'react'
 import {Component} from 'vlux'
-import {Row, Col, FormControl, FormGroup, ControlLabel} from 'react-bootstrap'
+import {Row, Col, FormControl, FormGroup} from 'react-bootstrap'
 import {actions as actionNames} from './actions'
 import {ListenFriends} from './listen_search.react'
 import {getSearchedFriendsIds} from './helpers'

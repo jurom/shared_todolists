@@ -2,17 +2,16 @@
 export const validityProps = (validation) => (name) => {
   const fieldValidity = validation.get(name)
   if (!fieldValidity) return {}
-  const {valid, showValidation, error} = fieldValidity
+  const {valid = null, showValidation = null, error = null} = fieldValidity
   if (!showValidation) return {}
   return {
-    hasFeedback: true,
-    bsStyle: valid ? 'success' : 'error',
+    valid: valid ? 'success' : 'error',
     help: valid ? null : error
   }
 }
 
 export const formValid = (validation) =>
-  validation.every(({valid}) => valid === true)
+  validation.every(({valid = null}) => valid === true)
 
 export const nameToPlaceholder = {
   email: 'Email',

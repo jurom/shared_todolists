@@ -68,7 +68,8 @@ export class Task extends Component {
     return (
       <Well bsSize="small">
         {content ?
-          fromJS(content.split('\n')).reduce((x, y) => x.push(<span>{y}</span>, <br />), fromJS([]))
+          fromJS(content.split('\n'))
+            .reduce((x, y, id) => x.push(<span key={`sp-${id}`}>{y}</span>, <br key={`br-${id}`}/>), fromJS([]))
         :
           'No description.'
         }
