@@ -48,7 +48,12 @@ export class Admin extends Component {
             const user = users.get(userId)
             return (
               <Loading key={userId} isReady={isLoaded(user)}>
-                {isLoaded(user) && <UserRow user={user} blockUser={adminActions.blockUser} />}
+                {isLoaded(user) &&
+                  <UserRow
+                    user={user}
+                    blockUser={adminActions.blockUser}
+                    loginAsUser={adminActions.loginAsUser}
+                  />}
               </Loading>
             )
           })}
@@ -63,10 +68,11 @@ class UserRow extends Component {
   static propTypes = {
     user: React.PropTypes.object.isRequired,
     blockUser: React.PropTypes.func.isRequired,
+    loginAsUser: React.PropTypes.func.isRequired,
   }
 
   render() {
-    const {user, blockUser} = this.props
+    const {user, blockUser, loginAsUser} = this.props
 
     return (
       <Row>
@@ -83,7 +89,7 @@ class UserRow extends Component {
           </Button>
         </Col>
         <Col xs={1}>
-          <Button>
+          <Button onClick={() => loginAsUser(user.get('id'))}>
             Login
           </Button>
         </Col>

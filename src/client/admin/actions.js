@@ -1,5 +1,6 @@
 import {createActions} from '../vlux'
 import {set} from '../../common/firebase_actions'
+import {create as createAuthActions} from '../auth/actions'
 
 export const actions = createActions('admin', [
   'onUserIds',
@@ -7,6 +8,9 @@ export const actions = createActions('admin', [
 ])
 
 export function create(dispatch, router, firebase, getState) {
+
+  const authActions = createAuthActions(dispatch, router, firebase, getState)
+
   return {
 
     blockUser(userId, block) {
@@ -16,6 +20,11 @@ export function create(dispatch, router, firebase, getState) {
     setPage(page) {
       dispatch(actions.setPage, page)
     },
+
+    loginAsUser(userId) {
+      authActions.handleAuth({uid: userId})
+      router.push('/dashboard')
+    }
 
   }
 }
