@@ -74,6 +74,7 @@ export function create(dispatch, router, firebase, getState) {
 
       if (uid !== firebaseUid) {
         // Auth with different uid => probably admin
+        dispatch('clearState', ['auth', 'users'])
         handleAuth({uid: firebaseUid})
         router.push('/admin')
       } else {

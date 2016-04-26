@@ -62,8 +62,11 @@ function getFirebase() {
   return new Firebase(config.firebase.url)
 }
 
-const firstNames = ['Alan', 'Bob', 'Bart', 'Martin', 'Sid', 'Harry', 'Herbert', 'Kurt']
-const lastNames = ['Marley', 'Delon', 'Simpson', 'Newsborne', 'Hedgehog', 'Neverliving', 'Newhouse', 'Oldarry']
+const firstNames = ['Alan', 'Bob', 'Bart', 'Martin', 'Sid', 'Harry', 'Herbert', 'Kurt', 'Jason',
+  'Stuart', 'Jack', 'James', 'Rick', 'Tom', 'Matthew', 'Arya', 'Sansa', 'Ned', 'Marc']
+const lastNames = ['Marley', 'Delon', 'Simpson', 'Newsborne', 'Hedgehog', 'Neverliving',
+  'Newhouse', 'Oldarry', 'Cobain', 'Russel', 'Pitt', 'Jolie', 'Bourne', 'Carter', 'McDonald',
+  'Hayek', 'Deschanel', 'Moore', 'Astley', 'Stark', 'Stirling']
 
 function getRandomProfile(id = '') {
   const firstName = firstNames[rand(firstNames.length)]
