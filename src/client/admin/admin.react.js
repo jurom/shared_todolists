@@ -1,12 +1,15 @@
 import React from 'react'
 import {Component} from 'vlux'
-import {Grid, Row, Col, Button, Pagination} from 'react-bootstrap'
+import {fromJS} from 'immutable'
+import {Grid, Row, Col, Button, Pagination, FormGroup, FormControl} from 'react-bootstrap'
 import {isBlocked, isLoaded, isAdmin, getName} from '../user/helpers'
-import {ListenAllUsers} from './listen_all_users.react'
-import {getActiveIds} from './helpers'
+import {ListenSearchedUsers} from '../helpers/listen_search.react'
+import {getActiveIds, getSearchedUserIds} from './helpers'
 import {Loading} from '../helpers/loading.react'
 import {requireAuth} from '../auth/require_registration_state.react'
 import {requirePermission} from '../helpers/require_permission.react'
+import {getProfileSearchIndices, encodeSearch} from '../../common/auth_actions'
+import {ListenUsers} from '../user/listen_user.react'
 
 @requireAuth
 @requirePermission((props) => isAdmin(props.user))
@@ -14,30 +17,53 @@ export class Admin extends Component {
 
   static propTypes ={
     firebase: React.PropTypes.object.isRequired,
-    dispatch: React.PropTypes.func.isRequired,
     actions: React.PropTypes.object.isRequired,
     users: React.PropTypes.object.isRequired,
     admin: React.PropTypes.object.isRequired,
     user: React.PropTypes.object.isRequired,
+    dispatch: React.PropTypes.func.isRequired,
+  }
+
+  fitsSearch(user, search) {
+    if (!isLoaded(user)) return false
+    const {profile} = user
+    const eSearch = encodeSearch(search)
+    return fromJS(getProfileSearchIndices(profile))
+      .some((val, key) => val.startsWith(eSearch))
   }
 
   render() {
-    const {firebase, dispatch, actions: {admin: adminActions},
-      admin: {page, pageSize, userIds}, users} = this.props
+    const {firebase, actions: {admin: adminActions},
+      admin: {page, pageSize, search: {userIds, value}}, users, user, dispatch} = this.props
 
-    const activeIds = getActiveIds(userIds, page, pageSize)
+    const searchedIds = getSearchedUserIds(userIds)
+
+    const activeIds = getActiveIds(searchedIds, page, pageSize)
 
     return (
       <Grid>
-        <ListenAllUsers {...{firebase, dispatch, page, pageSize, userIds}} />
+        <ListenUsers {...{firebase, dispatch, ids: activeIds}} />
+        <ListenSearchedUsers {...{search: value, firebase, setSearchedIds: adminActions.setSearchedIds}}
+          minLength={1}
+        />
         {userIds != null && <div>
           <Row>
-            <Col xs={6}>
+            <Col xs={4}>
               <h2>Manage users</h2>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
+              <FormGroup controlId="searchFriends">
+                <FormControl
+                  type="text"
+                  onChange={(e) => adminActions.setSearch(e.target.value)}
+                  value={value}
+                  placeholder={'Enter user\'s name'}
+                />
+              </FormGroup>
+            </Col>
+            <Col xs={4}>
               <Pagination prev next first last
-                items={Math.ceil(userIds.count() / pageSize)}
+                items={Math.ceil(searchedIds.count() / pageSize)}
                 activePage={page}
                 onSelect={(eventKey) => adminActions.setPage(eventKey)}
                 maxButtons={5}

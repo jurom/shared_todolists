@@ -5,6 +5,8 @@ import {create as createAuthActions} from '../auth/actions'
 export const actions = createActions('admin', [
   'onUserIds',
   'setPage',
+  'setSearch',
+  'setSearchedIds',
 ])
 
 export function create(dispatch, router, firebase, getState) {
@@ -24,6 +26,14 @@ export function create(dispatch, router, firebase, getState) {
     loginAsUser(userId) {
       authActions.handleAuth({uid: userId})
       router.push('/dashboard')
+    },
+
+    setSearch(value) {
+      dispatch(actions.setSearch, value)
+    },
+
+    setSearchedIds(searchedBy, ids) {
+      dispatch(actions.setSearchedIds, [searchedBy, ids])
     }
 
   }

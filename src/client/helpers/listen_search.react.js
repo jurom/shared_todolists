@@ -18,11 +18,12 @@ export class ListenSearchedUsers extends Component {
     search: React.PropTypes.string.isRequired,
     firebase: React.PropTypes.object.isRequired,
     setSearchedIds: React.PropTypes.func.isRequired,
+    minLength: React.PropTypes.number,
   }
 
   shouldSearch() {
-    const {search} = this.props
-    return search.length >= 1
+    const {search, minLength = 1} = this.props
+    return search.length >= minLength
   }
 
   render() {

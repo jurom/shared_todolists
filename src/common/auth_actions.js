@@ -3,12 +3,13 @@ import {set, read} from './firebase_actions'
 import Firebase from 'firebase'
 
 export function getProfileSearchIndices(profile) {
-  const first = profile.firstName.toUpperCase()
-  const last = profile.lastName.toUpperCase()
+  const {firstName, lastName, email} = profile
+  const first = firstName.toUpperCase()
+  const last = lastName.toUpperCase()
   return {
     firstLast: `${first}_${last}`,
     lastFirst: `${last}_${first}`,
-    email: profile.email.toUpperCase()
+    email: email.toUpperCase()
   }
 }
 
