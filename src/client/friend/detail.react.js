@@ -54,11 +54,14 @@ export class FriendDetail extends Component {
       <Grid>
         <ListenFriendTasks {...{firebase, dispatch, friendId, uid}} />
         <Row>
-          <Col md={3}>
-            <h1>User Profile</h1>
+          <Col md={3} xs={3}>
+            <h3>User Profile</h3>
             <UserProfile user={friend} />
           </Col>
-          <Col md={5}>
+          <Col md={4} xs={9}>
+            <ChatWidget {...{user, friend, messageActions, firebase, conversation}} />
+          </Col>
+          <Col md={5} xs={12}>
             {task && <TaskModal {...{task, submitTask}}
               hide={() => dispatch(actionNames.editTask, null)}
               setTaskData={(keyPath, data) => dispatch(actionNames.setEditedTaskData, [keyPath, data])}
@@ -69,9 +72,6 @@ export class FriendDetail extends Component {
               changeFilter={(filterName) => dispatch(actionNames.setTaskFilter, filterName)}
               {...{users, taskActions, filter}}
             />}
-          </Col>
-          <Col md={4}>
-            <ChatWidget {...{user, friend, messageActions, firebase, conversation}} />
           </Col>
         </Row>
       </Grid>

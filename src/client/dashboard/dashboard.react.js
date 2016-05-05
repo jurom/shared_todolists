@@ -27,7 +27,7 @@ export class Dashboard extends Component {
     return (
       <Grid>
         <Row>
-          <Col md={2}>
+          <Col sm={2} xs={12}>
             {renderNav(this.context.router, {
               baseRoute: '/dashboard',
               items: fromJS([
@@ -46,7 +46,7 @@ export class Dashboard extends Component {
               }
             })}
           </Col>
-          <Col md={10}>
+          <Col sm={10} xs={12}>
             {React.cloneElement(this.props.children, propsNoChildren)}
           </Col>
         </Row>

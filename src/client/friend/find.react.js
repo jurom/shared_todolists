@@ -34,7 +34,7 @@ export class FindFriends extends Component {
       <div>
         <ListenSearchedUsers {...{search, firebase, setSearchedIds: actions.setSearchedIds}} />
         <Row>
-          <Col md={6} >
+          <Col xs={12}>
             <FormGroup controlId="searchFriends">
               <FormControl
                 type="text"
@@ -47,7 +47,7 @@ export class FindFriends extends Component {
         </Row>
         <Row>
           {searchedUsers.map((user) =>
-            <Col md={3} key={user.get('id')}>
+            <Col md={3} sm={4} xs={6} key={user.get('id')}>
               <Friend {...{user, friends, actions}} />
             </Col>)}
         </Row>

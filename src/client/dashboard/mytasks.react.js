@@ -38,12 +38,12 @@ export class MyTasks extends Component {
     return (
       <Row>
         <ListenMyTasks {...{dispatch, firebase, uid}} />
-        <Col md={3} >
-          <h1>My Profile</h1>
+        <Col sm={3} xsHidden >
+          <h2>My Profile</h2>
           <UserProfile user={user} />
         </Col>
-        <Col md={9} >
-          <h1>My tasks</h1>
+        <Col sm={9} xs={12}>
+          <h2>My tasks</h2>
           {task && <TaskModal {...{task, submitTask}}
             hide={() => dispatch(actionNames.editTask, null)}
             setTaskData={(keyPath, data) => dispatch(actionNames.setEditedTaskData, [keyPath, data])}

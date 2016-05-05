@@ -25,7 +25,7 @@ export class Requests extends Component {
     return (
       <Row>
         {usersToShow.map((user) =>
-          <Col md={3}>
+          <Col md={3} xs={6} sm={4}>
             <Friend {...{user, friends, actions}} />
           </Col>
         )}
