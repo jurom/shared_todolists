@@ -55,6 +55,10 @@ export function create(dispatch, router, firebase, getState, submitTransaction) 
 
     editTask(task, id) {
       dispatch(actions.editTask, {...task.toJS(), id})
+    },
+
+    setSearchedIds(searchedBy, ids) {
+      dispatch(actions.onSearchedFriendIds, [searchedBy, ids])
     }
 
   }

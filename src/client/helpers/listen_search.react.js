@@ -1,7 +1,6 @@
 import React from 'react'
 import {Component} from 'vlux'
 import {listenFirebase} from '../helpers/listen_firebase.react'
-import {actions} from './actions'
 import {encodeSearch} from '../../common/auth_actions'
 
 const listenOnFriendBy = (searchBy) => listenFirebase(
@@ -10,15 +9,15 @@ const listenOnFriendBy = (searchBy) => listenFirebase(
     .startAt(encodeSearch(props.search))
     .endAt(encodeSearch(props.search) + 'a')
     .limitToFirst(8),
-  (e, props, data) => props.dispatch(actions.onSearchedFriendIds, [searchBy, Object.keys(data.val() || {})])
+  (e, props, data) => props.setSearchedIds(searchBy, Object.keys(data.val() || {}))
 )
 
-export class ListenFriends extends Component {
+export class ListenSearchedUsers extends Component {
 
   static propTypes = {
     search: React.PropTypes.string.isRequired,
     firebase: React.PropTypes.object.isRequired,
-    dispatch: React.PropTypes.func.isRequired,
+    setSearchedIds: React.PropTypes.func.isRequired,
   }
 
   shouldSearch() {
@@ -31,13 +30,13 @@ export class ListenFriends extends Component {
     const ListenFirstLast = listenOnFriendBy('firstLast')
     const ListenLastFirst = listenOnFriendBy('lastFirst')
 
-    const {search, firebase, dispatch} = this.props
+    const {search, firebase, setSearchedIds} = this.props
 
     return (
       <div>
-        {this.shouldSearch() && <ListenEmails {...{firebase, dispatch, search}} />}
-        {this.shouldSearch() && <ListenFirstLast {...{firebase, dispatch, search}} />}
-        {this.shouldSearch() && <ListenLastFirst {...{firebase, dispatch, search}} />}
+        {this.shouldSearch() && <ListenEmails {...{firebase, setSearchedIds, search}} />}
+        {this.shouldSearch() && <ListenFirstLast {...{firebase, setSearchedIds, search}} />}
+        {this.shouldSearch() && <ListenLastFirst {...{firebase, setSearchedIds, search}} />}
       </div>
     )
 

@@ -2,7 +2,7 @@ import React from 'react'
 import {Component} from 'vlux'
 import {Row, Col, FormControl, FormGroup} from 'react-bootstrap'
 import {actions as actionNames} from './actions'
-import {ListenFriends} from './listen_search.react'
+import {ListenSearchedUsers} from '../helpers/listen_search.react'
 import {getSearchedFriendsIds} from './helpers'
 import {isLoaded} from '../user/helpers'
 import {requireAuth} from '../auth/require_registration_state.react.js'
@@ -32,7 +32,7 @@ export class FindFriends extends Component {
 
     return (
       <div>
-        <ListenFriends {...{search, dispatch, firebase}} />
+        <ListenSearchedUsers {...{search, firebase, setSearchedIds: actions.setSearchedIds}} />
         <Row>
           <Col md={6} >
             <FormGroup controlId="searchFriends">
