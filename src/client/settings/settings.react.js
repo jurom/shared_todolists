@@ -38,21 +38,16 @@ export class Settings extends Component {
       )
     }
     return (
-      <Modal show={show} onHide={() => dispatch(actionNames.toggleShow, false)}>
+      <Modal show={show} bsSize="sm" onHide={() => dispatch(actionNames.toggleShow, false)}>
         <Modal.Header closeButton>
           <Modal.Title>Settings</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Grid fluid>
             <Row>
-              <Col md={6}>
+              <Col md={12}>
                 <h2>Profile</h2>
                 {fromJS(fieldToLabel).map(inputFor).valueSeq()}
-              </Col>
-              <Col md={6}>
-                <h2>Account</h2>
-                <Button block bsStyle="danger">Change email</Button>
-                <Button block bsStyle="danger">Change password</Button>
               </Col>
             </Row>
           </Grid>
