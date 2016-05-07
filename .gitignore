@@ -52,4 +52,4 @@ webpack-assets.json
 .sublimelinterrc
 
 # firebase secrets
-secrets.js
+fbsecret.sh

@@ -1,5 +1,4 @@
 import merge from 'deepmerge'
-import {devel, heroku} from '../../secrets'
 
 const env = process.env.env || 'devel'
 
@@ -7,6 +6,9 @@ const configBase = {
   env: env,
   version: require('../../package').version,
   hotPort: 8888,
+  firebase: {
+    secret: process.env.FIREBASE_SECRET,
+  }
 }
 
 const configEnv = {
@@ -16,7 +18,6 @@ const configEnv = {
     useWebpackDevServer: true,
     firebase: {
       url: 'https://todosharedevel.firebaseio.com/',
-      secret: devel,
     },
   },
   heroku: {
@@ -25,7 +26,6 @@ const configEnv = {
     useWebpackDevServer: false,
     firebase: {
       url: 'https://todoshareheroku.firebaseio.com/',
-      secret: heroku,
     },
   }
 }
