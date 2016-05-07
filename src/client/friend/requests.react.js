@@ -6,7 +6,7 @@ import {Friend} from './friend.react'
 import {requireLoad} from '../helpers/require_load.react'
 
 
-@requireLoad((props) => props.friends.getIn(['requests', 'received']) != null)
+@requireLoad(({friends: {requests: {received = null, sent = null}}}) => (sent != null) && (received != null))
 export class Requests extends Component {
 
   static propTypes = {
@@ -17,11 +17,15 @@ export class Requests extends Component {
 
   render() {
 
-    const {friends, friends: {requests: {received}}, users, actions: {friends: actions}} = this.props
+    const {friends, friends: {requests: {received, sent}}, users, actions: {friends: actions}} = this.props
 
-    const usersToShow = received.valueSeq()
+    const usersToShow = received
       .map(({requestingUserId}) => users.get(requestingUserId))
+      .merge(
+        sent.map(({requestedUserId}) => users.get(requestedUserId))
+      )
       .filter(isLoaded)
+      .valueSeq()
     return (
       <Row>
         {usersToShow.map((user) =>

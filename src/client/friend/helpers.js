@@ -9,6 +9,7 @@ export function getFriendIdsToListen(friends) {
   return getSearchedFriendsIds(friends)
     .union(friends.get('friendIds') || (new OrderedSet()))
     .union((friends.getIn(['requests', 'received']) ||  fromJS({})).keySeq())
+    .union((friends.getIn(['requests', 'sent']) || fromJS({})).keySeq())
 }
 
 export function isFriend(user, friends) {
