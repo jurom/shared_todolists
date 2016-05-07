@@ -1,6 +1,5 @@
 import {createActions} from '../vlux'
 import {createUser, authWithPassword} from '../../common/firebase_actions'
-import {storeUser} from '../../common/auth_actions'
 
 export const actions = createActions('auth', [
   'set',
@@ -8,7 +7,7 @@ export const actions = createActions('auth', [
   'validation',
 ])
 
-export function create(dispatch, router, firebase, getState) {
+export function create(dispatch, router, firebase, getState, submitTransaction) {
 
   const redirectTo = (route) => router.push(route)
 
@@ -32,7 +31,10 @@ export function create(dispatch, router, firebase, getState) {
 
     signup({email, password, firstName, lastName}) {
       return createUser(firebase, {email, password})
-        .then(({uid}) => storeUser(firebase, {uid, email, profile: {firstName, lastName}}))
+        .then(({uid}) => submitTransaction('registerUser', {
+          uid, email, profile: {firstName, lastName}
+        }).then(() => console.log('authing'))
+        )
         .then(() => authWithPassword(firebase, {email, password}))
         .catch((e) => {
           if (e.code === 'EMAIL_TAKEN') {

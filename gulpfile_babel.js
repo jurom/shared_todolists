@@ -13,7 +13,9 @@ import Firebase from 'firebase'
 import {rand, repeatAsync} from './src/common/useful'
 import {createUser, read, set, removeUser} from './src/common/firebase_actions'
 import {storeUser} from './src/common/auth_actions'
+import {transactorOps} from './src/client/helpers/transactor_useful'
 import {fromJS} from 'immutable'
+import {generateMasterToken} from './src/server/generate_token'
 
 /*eslint-disable no-console */
 
@@ -58,8 +60,20 @@ gulp.task('clean', function() {
     .pipe(clean({force: true}))
 })
 
+let firebaseSingleton = null
+
 function getFirebase() {
-  return new Firebase(config.firebase.url)
+  if (firebaseSingleton != null) return Promise.resolve(firebaseSingleton)
+  const ref = new Firebase(config.firebase.url)
+  return new Promise((resolve, reject) => ref.authWithCustomToken(generateMasterToken(config.firebase.secret),
+    (error, authData) => {
+      if (error) {
+        console.log('Error authenticating with custom token')
+      } else {
+        firebaseSingleton = ref
+        resolve(ref)
+      }
+    }))
 }
 
 const firstNames = ['Alan', 'Bob', 'Bart', 'Martin', 'Sid', 'Harry', 'Herbert', 'Kurt', 'Jason',
@@ -76,32 +90,34 @@ function getRandomProfile(id = '') {
 }
 
 gulp.task('init-users', () => {
-  const firebase = new Firebase(config.firebase.url)
-  return repeatAsync(yargs.argv.n || 10, (i) => {
-    const profile = getRandomProfile(i)
-    const {email} = profile
-    return createUser(firebase, {email, password: 'password'})
-      .then(({uid}) => storeUser(firebase, {uid, email, profile}))
-      .catch((e) => console.log('Error, skipping: ', email, 'error: ', e))
-  })
+  return getFirebase()
+    .then((firebase) => repeatAsync(yargs.argv.n || 10, (i) => {
+      const profile = getRandomProfile(i)
+      const {email} = profile
+      return createUser(firebase, {email, password: 'password'})
+        .then(({uid}) => storeUser(transactorOps(firebase), {uid, email, profile}))
+        .catch((e) => console.log('Error, skipping: ', email, 'error: ', e))
+    })
+  )
 })
 
 gulp.task('delete-users', () => {
-  const firebase = getFirebase()
-  return read(firebase.child(`user/profile`))
-    .then((profiles) => profiles && fromJS(profiles)
-      .valueSeq()
-      .map(({email}) => email)
-      .filter((email) => email.endsWith('@todoshare.com'))
-      .toJS()
+  return getFirebase()
+    .then((firebase) =>
+      read(firebase.child(`user/profile`))
+        .then((profiles) => profiles && fromJS(profiles)
+          .valueSeq()
+          .map(({email}) => email)
+          .filter((email) => email.endsWith('@todoshare.com'))
+          .toJS()
+        )
+        .then((emails) => emails && repeatAsync(emails.length, (i) =>
+          removeUser(firebase, {email: emails[i], password: 'password'})))
     )
-    .then((emails) => emails && repeatAsync(emails.length, (i) =>
-      removeUser(firebase, {email: emails[i], password: 'password'})))
 })
 
 gulp.task('delete-db', () => {
-  const firebase = getFirebase()
-  return set(firebase, null)
+  return getFirebase().then((firebase) => set(firebase, null))
 })
 
 gulp.task('reset-db', (done) => {

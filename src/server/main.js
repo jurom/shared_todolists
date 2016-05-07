@@ -3,6 +3,7 @@ import frontend from './frontend'
 import {Promise} from 'bluebird'
 import Firebase from 'firebase'
 import {startTransactor} from './transactor/transactor'
+import {generateMasterToken} from './generate_token'
 
 /*
  * Runs server with custom config. Returns {handler, started}.
@@ -17,9 +18,19 @@ export function runServerConfig(config) {
   app.use(frontend)
 
 
-  const firebase = new Firebase(config.firebase.url)
-  console.log('Starting transactor with env', config.env)
-  startTransactor(firebase)
+  new Promise((resolve, reject) => {
+    const ref = new Firebase(config.firebase.url)
+    ref.authWithCustomToken(generateMasterToken(config.firebase.secret), (error, authData) => {
+      if (error) {
+        console.error('Could not authenticate server')
+      } else {
+        resolve(ref)
+      }
+    })
+  }).then((firebase) => {
+    console.log('Starting transactor with env', config.env)
+    startTransactor(firebase)
+  })
 
   return new Promise((resolve, reject) => {
     app.listen(config.port, '0.0.0.0', 511, () => {

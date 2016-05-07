@@ -1,5 +1,6 @@
 import {transactor} from '../../firebase-transactions/src/transactor'
 import {sendRequest, acceptRequest, cancelRequest, rejectRequest} from './friend_request'
+import {registerUser} from './register_user'
 import {fromJS} from 'immutable'
 
 function withUnpackedCredentials(handler, requireAuth) {
@@ -21,7 +22,8 @@ export function startTransactor(firebase) {
     .toJS()
 
   const handlers = {
-    ...friendRequest
+    ...friendRequest,
+    registerUser: withUnpackedCredentials(registerUser, true),
   }
 
   transactor(firebase, handlers, {todoTrxRef: firebase.child('new_transaction')})
